@@ -12,7 +12,7 @@ import { RootState, AppDispatch } from "@/lib/store/store";
 import { fetchSettings } from "@/lib/store/slices/settingsSlice";
 import { updateUser, createUser, deleteUser } from "@/lib/services/users-service";
 import { toast } from "sonner";
-import { User } from "@/types/apiTypes";
+import { User } from "@/types/api.interfaces";
 import { useUsers } from "./useUsers";
 import type { SortingState } from "@tanstack/react-table";
 import { useUserColumns } from "./useUserColumns";

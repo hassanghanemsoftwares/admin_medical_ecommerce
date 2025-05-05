@@ -19,8 +19,7 @@ const onRequest = async (config: InternalAxiosRequestConfig): Promise<InternalAx
         Authorization: token ? `Bearer ${token}` : "",
         "X-Team-ID": team,
         "Accept-Language": language,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+     
         'App-key':APP_KEY ,
         'agent': userAgent,
         ...config.headers,

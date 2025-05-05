@@ -9,19 +9,13 @@ export const navItems: NavItem[] = [
     permission: "view-dashboard",
   },
   {
-    title: 'Users',
-    url: '/users',
+    title: 'Categories',
+    url: '/categories',
     icon: 'userPen',
-    permission: "view-user",
-    shortcut: ['u', 'u'],
+    permission: "view-category",
+    shortcut: ['c', 'c'],
   },
-  {
-    title: 'Activity-logs',
-    url: '/activity-logs',
-    icon: 'userPen',
-    permission: "view-activity-logs",
-    shortcut: ['l', 'l'],
-  },
+
   // {
   //   title: 'Accounts',
   //   url: '#',
@@ -39,4 +33,30 @@ export const navItems: NavItem[] = [
   //   ]
   // },
 
+];
+export const profileDropdownItems = [
+  {
+    permission: "view-profile",
+    to: "/profile",
+    translationKey: "Sidebar.Profile",
+    shortcut: ['p', 'p'],
+  },
+  {
+    permission: "view-settings",
+    to: "/settings",
+    translationKey: "Sidebar.Settings",
+    shortcut: ['s', 's'],
+  },
+  {
+    permission: "view-user",
+    to: "/users",
+    translationKey: "Sidebar.Users",
+    shortcut: ['u', 'u'],
+  },
+  {
+    permission: "view-activity-logs",
+    to: "/activity-logs",
+    translationKey: "Sidebar.Activity-logs",
+    shortcut: ['l', 'l'],
+  },
 ];

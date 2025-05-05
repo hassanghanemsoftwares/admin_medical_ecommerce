@@ -12,7 +12,7 @@ import {
   CommandSeparator,
 } from '@/components/ui/command';
 import { useNavigate } from 'react-router-dom';
-import { navItems } from '@/constants/data';
+import { navItems, profileDropdownItems } from '@/constants/data';
 import { useTranslation } from 'react-i18next';
 import { ScrollArea } from './ui/scroll-area';
 import { useSelector } from 'react-redux';
@@ -38,16 +38,13 @@ export function CommandMenu() {
     {
       title: 'Overview',
       items: navItems.filter((item) => {
-        // Only show if user has permission
         if (item.permission && !user?.permissions.includes(item.permission)) return false;
 
-        // If item has subItems, filter those too
         if (item.items?.length) {
           item.items = item.items.filter((subItem) =>
             subItem.permission ? user?.permissions.includes(subItem.permission) : true
           );
 
-          // Only keep parent if it still has valid children
           return item.items.length > 0;
         }
 
@@ -55,7 +52,10 @@ export function CommandMenu() {
       }),
     },
   ];
-
+  const profileGroup = {
+    title: 'Profile',
+    items: profileDropdownItems.filter((item) => user?.permissions.includes(item.permission)),
+  };
   return (
     <CommandDialog modal open={open} onOpenChange={setOpen}>
       <div dir={dir}>
@@ -72,7 +72,6 @@ export function CommandMenu() {
                 </span>}
               >
                 {group.items.map((navItem, i) => {
-                  // Single item with URL
                   if (navItem.url && navItem.url !== '#') {
                     return (
                       <CommandItem
@@ -98,7 +97,6 @@ export function CommandMenu() {
                     );
                   }
 
-                  // Sub-items
                   return navItem.items?.map((subItem, j) => (
                     <CommandItem
                       key={`${subItem.url}-${j}`}
@@ -124,14 +122,42 @@ export function CommandMenu() {
                 })}
               </CommandGroup>
             ))}
-
             <CommandSeparator />
             <CommandGroup
-              heading={
-                <span className={dir === 'rtl' ? 'text-right w-full block' : ''}>
-                  {messages('Sidebar.togle_theme')}
-                </span>
-              }
+              heading={<span className={dir === 'rtl' ? 'text-right w-full block' : ''}>
+                {messages('Sidebar.Profile')}
+              </span>}
+            >
+              {profileGroup.items.map((profileItem, i) => (
+                <CommandItem
+                  key={`${profileItem.to}-${i}`}
+                  value={profileItem.translationKey}
+                  onSelect={() => runCommand(() => navigate(profileItem.to))}
+                  className="place-content-between"
+                >
+                  {messages(profileItem.translationKey)}
+                  {profileItem.shortcut?.length && (
+                    <div className="relative z-10 grid grid-flow-col gap-1">
+                      {profileItem.shortcut.map((sc, i) => (
+                        <kbd
+                          key={sc + i}
+                          className="flex items-center gap-1 rounded-md border px-1.5 py-1 text-xs font-medium shadow"
+                        >
+                          {sc}
+                        </kbd>
+                      ))}
+                    </div>
+                  )}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+
+            {/* Theme toggle */}
+            <CommandSeparator />
+            <CommandGroup
+              heading={<span className={dir === 'rtl' ? 'text-right w-full block' : ''}>
+                {messages('Sidebar.togle_theme')}
+              </span>}
             >
               <CommandItem
                 className="place-content-between"

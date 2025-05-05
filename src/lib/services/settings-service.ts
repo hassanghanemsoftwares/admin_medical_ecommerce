@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GetAllSettingsResponse } from "@/types/apiTypes";
+import { GetAllSettingsResponse } from "@/types/response.interfaces";
 import API_ENDPOINTS, { } from "../api-endpoints";
 import axiosInstance from "../axiosInstance";
 

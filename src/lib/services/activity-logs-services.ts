@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GetActivityLogsResponse } from "@/types/apiTypes";
+import { GetActivityLogsResponse } from "@/types/response.interfaces";
 import API_ENDPOINTS, { } from "../api-endpoints";
 import axiosInstance from "../axiosInstance";
 

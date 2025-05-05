@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { MoreHorizontal } from "lucide-react";
-import { User } from "@/types/apiTypes";
 import { TableHeaderSort } from "@/components/datatable/table-header-sort";
 import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Toggle } from "@/components/ui/toggle";
+import { User } from "@/types/api.interfaces";
 
 
 type UseUserColumnsProps = {

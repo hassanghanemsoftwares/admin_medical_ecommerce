@@ -17,6 +17,7 @@ import { getCsrfCookies } from "./lib/services/sessions-service";
 import ActivityLogs from "./features/activity-logs";
 import NotFoundError from "./features/errors/not-found-error";
 import AuthLayout from "./features/auth/auth-layout";
+import Categories from "./features/categories";
 
 function App() {
   const hasRun = useRef(false);
@@ -99,6 +100,15 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="view-activity-logs">
                   <ActivityLogs />
+                </ProtectedRoute>
+              }
+            />
+
+            <ReactRouterRoute
+              path="categories"
+              element={
+                <ProtectedRoute requiredPermission="view-category">
+                  <Categories />
                 </ProtectedRoute>
               }
             />

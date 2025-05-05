@@ -1,30 +1,27 @@
 import { ReusableDialog } from "@/components/reusable-dialog";
 import { DeleteDialog } from "@/components/DeleteDialog";
-
-import { UserForm } from "../form/UserForm";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { User } from "@/types/api.interfaces";
+import { Category } from "@/types/api.interfaces";
+import { CategoryForm } from "../form/CategoryForm";
 
-export function UsersTableDialogs({
+export function CategoriesTableDialogs({
   open,
   setOpen,
-  editingUser,
-  setEditingUser,
+  editingCategory,
+  setEditingCategory,
   messages,
+  arrangements,
   onSubmit,
-  roles,
-  permissions,
   deleteDialogProps,
   activeDialogProps,
 }: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  editingUser: User | null;
-  setEditingUser: React.Dispatch<React.SetStateAction<User | null>>;
+  editingCategory: Category | null;
+  setEditingCategory: React.Dispatch<React.SetStateAction<Category | null>>;
   messages: any;
   onSubmit: (data: any) => void;
-  roles: any[];
-  permissions: any[];
+  arrangements: string[];
   deleteDialogProps: {
     open: boolean;
     onClose: () => void;
@@ -51,25 +48,30 @@ export function UsersTableDialogs({
         open={open}
         onClose={() => {
           setOpen(false);
-          setEditingUser(null);
+          setEditingCategory(null);
         }}
-        title={editingUser ? messages("Users.updateUser") : messages("Users.addUser")}
+        title={
+          editingCategory
+            ? messages("Categories.updateCategory")
+            : messages("Categories.addCategory")
+        }
         description={
-          editingUser
-            ? messages("Users.updateUserDescription")
-            : messages("Users.addUserDescription")
+          editingCategory
+            ? messages("Categories.updateCategoryDescription")
+            : messages("Categories.addCategoryDescription")
         }
       >
-        <UserForm
+        <CategoryForm
           onSubmit={onSubmit}
           onCancel={() => setOpen(false)}
-          roles={roles}
-          permissions={permissions}
-          isEdit={!!editingUser}
-          initialData={editingUser || undefined}
+          isEdit={!!editingCategory}
+          initialData={editingCategory|| undefined }
+          arrangements={arrangements}
         />
       </ReusableDialog>
+
       <DeleteDialog {...deleteDialogProps} />
+
       <ConfirmDialog
         open={activeDialogProps.open}
         onOpenChange={activeDialogProps.onOpenChange}
@@ -81,7 +83,6 @@ export function UsersTableDialogs({
         confirmText={activeDialogProps.confirmText}
         destructive={activeDialogProps.destructive}
       />
-
     </>
   );
 }

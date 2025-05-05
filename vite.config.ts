@@ -7,7 +7,6 @@ import { defineConfig } from "vite"
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    host: 'admin_medical_ecommerce',
     port: 3000,
   },
   resolve: {

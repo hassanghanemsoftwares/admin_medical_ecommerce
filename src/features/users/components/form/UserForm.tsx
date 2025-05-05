@@ -24,7 +24,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Role, Permission } from "@/types/apiTypes";
+import { Role, Permission } from "@/types/api.interfaces";
 import { Label } from "@/components/ui/label";
 import PasswordInput from "@/components/password-input";
 
@@ -55,18 +55,18 @@ export const UserForm = ({
 }: UserFormProps) => {
   const { t: messages } = useTranslation();
   const passwordSchema = z
-  .string()
-  .min(8, { message: messages("auth.passwordMinLength") })
-  .regex(/[A-Z]/, { message: messages("auth.passwordUppercase") })
-  .regex(/[a-z]/, { message: messages("auth.passwordLowercase") })
-  .regex(/[0-9]/, { message: messages("auth.passwordNumber") })
-  .regex(/[^A-Za-z0-9]/, { message: messages("auth.passwordSpecialCharacter") });
+    .string()
+    .min(8, { message: messages("auth.passwordMinLength") })
+    .regex(/[A-Z]/, { message: messages("auth.passwordUppercase") })
+    .regex(/[a-z]/, { message: messages("auth.passwordLowercase") })
+    .regex(/[0-9]/, { message: messages("auth.passwordNumber") })
+    .regex(/[^A-Za-z0-9]/, { message: messages("auth.passwordSpecialCharacter") });
 
-const formSchema = z.object({
-  name: z.string().min(1, messages("Users.nameRequired")),
-  email: z.string().email(messages("Users.validEmail")),
-  password: isEdit
-    ? z
+  const formSchema = z.object({
+    name: z.string().min(1, messages("Users.nameRequired")),
+    email: z.string().email(messages("Users.validEmail")),
+    password: isEdit
+      ? z
         .string()
         .optional()
         .transform((val) => (val === "" ? undefined : val))
@@ -77,10 +77,10 @@ const formSchema = z.object({
             message: messages("auth.invalidPassword"),
           }
         )
-    : passwordSchema,
-  role: z.string().min(1, messages("Users.roleRequired")),
-  permissions: z.array(z.string()),
-});
+      : passwordSchema,
+    role: z.string().min(1, messages("Users.roleRequired")),
+    permissions: z.array(z.string()),
+  });
   const methods = useForm<UserFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {

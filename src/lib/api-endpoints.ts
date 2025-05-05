@@ -37,6 +37,13 @@ const API_ENDPOINTS = {
         UPDATE: (userId: number) => withVersion(`users/${userId}`),
         DELETE: (userId: number) => withVersion(`users/${userId}`),
     },
+    CATEGORIES: {
+        LIST: withVersion("categories"),
+        DETAILS: (id: number) => withVersion(`categories/${id}`),
+        CREATE: withVersion("categories"),
+        UPDATE: (categoryId: number) => withVersion(`categories/${categoryId}`),
+        DELETE: (categoryId: number) => withVersion(`categories/${categoryId}`),
+    },
 };
 
 export default API_ENDPOINTS;

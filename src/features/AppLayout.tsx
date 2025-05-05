@@ -19,7 +19,7 @@ export default function AppLayout() {
     const { data, isLoading, isError } = useQuery({
         queryKey: ['user'],
         queryFn: getCurrentUser,
-        refetchInterval: 30000,
+        // refetchInterval: 30000,
     });
 
     useEffect(() => {
@@ -51,7 +51,7 @@ export default function AppLayout() {
         <SearchProvider>
             <SidebarProvider defaultOpen={defaultOpen}>
                 <AppSidebar />
-                <SidebarInset>
+                <SidebarInset className=" overflow-x-hidden">
                     <Header />
                     <Outlet />
                     <Footer />

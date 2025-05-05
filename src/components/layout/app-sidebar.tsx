@@ -9,6 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import {
@@ -93,6 +94,7 @@ export default function AppSidebar() {
                               >
                                 <NavLink to={subItem.url}>
                                   <span>{messages('Sidebar.' + subItem.title)}</span>
+                                  <DropdownMenuShortcut>{subItem.shortcut}</DropdownMenuShortcut>
                                 </NavLink>
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
@@ -111,6 +113,7 @@ export default function AppSidebar() {
                       <NavLink to={item.url}>
                         <Icon />
                         <span>{messages('Sidebar.' + item.title)}  </span>
+                         <DropdownMenuShortcut>{item.shortcut}</DropdownMenuShortcut>
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

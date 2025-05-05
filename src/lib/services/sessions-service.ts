@@ -4,8 +4,8 @@ import axiosInstance from "../axiosInstance";
 export const getCsrfCookies = async () => {
     try {
         const response = await axiosInstance.get(
-          API_ENDPOINTS.AUTH.CSRF,
-         
+            API_ENDPOINTS.AUTH.CSRF,
+
         );
 
         return response.data;

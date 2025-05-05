@@ -1,9 +1,10 @@
-
 import React from 'react'
 import { CommandMenu } from '@/components/command-menu'
 import { NavItem } from '@/types'
-import { navItems } from '@/constants/data'
+import { navItems, profileDropdownItems } from '@/constants/data'
 import { useNavigate } from 'react-router-dom'
+import { RootState } from '@/lib/store/store'
+import { useSelector } from 'react-redux'
 
 
 interface SearchContextType {
@@ -20,18 +21,33 @@ interface Props {
 export function SearchProvider({ children }: Props) {
   const [open, setOpen] = React.useState(false)
   const navigate = useNavigate()
+  const user = useSelector((state: RootState) => state.auth.user);
 
-  // Flatten all nav items for shortcut handling
-  const flattenItems = (items: NavItem[]): NavItem[] => {
-    return items.reduce<NavItem[]>((acc, item) => {
+  // Flatten all nav items (including nested) and profile dropdown items
+  const flattenNavItems = (items: NavItem[]): { url: string, shortcut: string[], permission: string }[] => {
+    return items.reduce<{ url: string, shortcut: string[], permission: string }[]>((acc, item) => {
       if (item.items && item.items.length > 0) {
-        return [...acc, ...flattenItems(item.items)]
+        return [...acc, ...flattenNavItems(item.items)]
       }
-      return [...acc, item]
+      if (item.shortcut && item.url) {
+        acc.push({ url: item.url, shortcut: item.shortcut, permission: item.permission })
+      }
+      return acc
     }, [])
   }
 
-  const allNavItems = flattenItems(navItems)
+  const flattenProfileItems = profileDropdownItems
+    .filter(item => item.shortcut && item.to && item.permission)
+    .map(item => ({
+      url: item.to,
+      shortcut: item.shortcut,
+      permission:item.permission
+    }))
+
+  const allShortcutItems = [
+    ...flattenNavItems(navItems),
+    ...flattenProfileItems
+  ]
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -45,12 +61,13 @@ export function SearchProvider({ children }: Props) {
       // Don't trigger if typing in an input
       if (document.activeElement instanceof HTMLInputElement) return
 
-      // Global shortcuts (double key press)
+      // Global shortcuts (double key press) and check permissions
       if (!e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
-        const matchingItem = allNavItems.find(
-          item => item.shortcut &&
+        const matchingItem = allShortcutItems.find(
+          item =>
             item.shortcut.length === 2 &&
-            item.shortcut[0] === e.key.toLowerCase()
+            item.shortcut[0] === e.key.toLowerCase() &&
+            (item.permission ? user?.permissions.includes(item.permission) : true)
         )
 
         if (matchingItem) {
@@ -62,7 +79,7 @@ export function SearchProvider({ children }: Props) {
 
     document.addEventListener('keydown', down)
     return () => document.removeEventListener('keydown', down)
-  }, [navigate, allNavItems])
+  }, [navigate, allShortcutItems, user?.permissions])
 
   return (
     <SearchContext.Provider value={{ open, setOpen }}>
