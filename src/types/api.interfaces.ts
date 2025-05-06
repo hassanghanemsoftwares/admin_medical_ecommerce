@@ -71,3 +71,83 @@ export interface Permission {
   id: number;
   name: string;
 }
+
+export interface Brand {
+  id: number;
+  name: string;
+  is_active: boolean;
+  created_at: string | null;
+  updated_at: string | null;
+}
+export interface Color {
+  id: number;
+  name: Record<string, string>; 
+  code: string;
+  color_season_id: number;
+  color_season: ColorSeason | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface ColorSeason {
+  id: number;
+  name: Record<string, string>; 
+  created_at: string | null;
+  updated_at: string | null;
+}
+export interface Configuration {
+  key: string;
+  value: string;
+}
+
+
+export interface HomeSection {
+  id: number;
+  type: string;
+  title: string;
+  content: string;
+  arrangement: number;
+  is_active: boolean;
+  created_at: string | null;
+  updated_at: string | null;
+}
+export interface LearningVideo {
+  id: number;
+  title: string;
+  description: string;
+  video: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+
+export interface Size {
+  id: number;
+  name: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+export interface Tag {
+  id: number;
+  name: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+export interface Warehouse {
+  id: number;
+  name: string;
+  location: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+
+export interface Shelf {
+  id: number;
+  warehouse_id: number;
+  warehouse: Warehouse | null;
+  name: string;
+  location: string;
+  created_at: string | null;
+  updated_at: string | null;
+}

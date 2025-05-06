@@ -78,31 +78,27 @@ export function useCategoriesTableLogic() {
             console.error("No category selected for status toggle");
             return;
         }
-    
+
         setIsTogglingStatus(true);
-    
+
         try {
             const newStatus = !selectedCategory.is_active;
             console.log(`Updating category ${selectedCategory.id} status to: ${newStatus}`);
-            
-            // Create a new FormData object to send only the is_active field as a boolean
+
             const formData = new FormData();
-            formData.append('is_active', newStatus ? '1' : '0');  // Send 1 or 0 instead of true/false
-    
-            // Optionally, append the existing category data (if necessary)
+            formData.append('is_active', newStatus ? '1' : '0');
             formData.append('name[en]', selectedCategory.name.en);
             formData.append('name[ar]', selectedCategory.name.ar);
             formData.append('arrangement', selectedCategory.arrangement.toString());
-    
-            // Send the updated category status
+
             const response = await updateCategory(selectedCategory.id, formData);
-    
+
             if (!response) {
                 throw new Error("Empty response received");
             }
-    
+
             console.log("Status toggle response:", response);
-    
+
             if (response.result) {
                 toast.success(response.message || messages("Categories.StatusUpdateSuccess"));
             } else {
@@ -117,8 +113,8 @@ export function useCategoriesTableLogic() {
             refetch();
         }
     };
-    
-    
+
+
 
     const handleSubmitCategoryForm = async (data: any) => {
         try {
@@ -133,7 +129,7 @@ export function useCategoriesTableLogic() {
                 if (data.image instanceof File) {
                     formData.append('image', data.image);
                 } else {
-                    throw new Error(messages("category.image_required"));
+                    throw new Error(messages("Public.image_required"));
                 }
             } else {
                 if (data.image instanceof File) {
@@ -154,7 +150,7 @@ export function useCategoriesTableLogic() {
             refetch();
         } catch (error) {
             console.error("Category submission failed:", error);
-            toast.error(messages("Categories.UnexpectedError"));
+            toast.error(messages("Public.UnexpectedError"));
         }
     };
 

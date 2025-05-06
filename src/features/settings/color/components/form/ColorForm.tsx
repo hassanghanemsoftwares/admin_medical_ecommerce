@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import {
   Select,
   SelectTrigger,
@@ -20,68 +21,51 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { useTranslation } from "react-i18next";
-import { ImageUploadInput } from "@/components/ImageUploadInput";
+import { ColorSeason } from "@/types/api.interfaces";
 
-type CategoryFormValues = {
+type ColorFormValues = {
   name: Record<string, string>;
-  arrangement?: string;
-  image: File | string | null;
+  code: string;
+  color_season_id: number;
 };
 
-// Define the schema outside the component
-const createFormSchema = (messages: (key: string) => string, isEdit: boolean) => {
-  const baseImageSchema = z
-    .any()
-    .refine(
-      (val) => val !== undefined && (val === null || val instanceof File),
-      { message: messages("Public.image_mimes") }
-    )
-    .refine(
-      (val) =>
-        val === null ||
-        (val instanceof File &&
-          ["image/jpeg", "image/png", "image/jpg", "image/gif"].includes(val.type)),
-      { message: messages("Public.image_mimes") }
-    )
-    .refine(
-      (val) => val === null || (val instanceof File && val.size <= 2 * 1024 * 1024),
-      { message: messages("Public.image_max_size") }
-    );
-
-  const imageSchema = isEdit
-    ? z.union([baseImageSchema, z.string().url()]).optional()
-    : baseImageSchema.nullable().refine(val => val !== null && val !== undefined, {
-        message: messages("Public.image_required")
-      });
-
+const createFormSchema = (messages: (key: string) => string) => {
   return z.object({
     name: z.object({
-      en: z.string().min(1, messages("Public.name_en_required")),
-      ar: z.string().min(1, messages("Public.name_ar_required")),
+      en: z.string().min(1, messages("Public.name_en_required")).max(255),
+      ar: z.string().min(1, messages("Public.name_ar_required")).max(255),
     }),
-    arrangement: z.string().optional(),
-    image: imageSchema,
+    code: z
+      .string()
+      .min(1, messages("Public.code_required"))
+      .max(20, messages("Public.code_max")),
+    color_season_id: z
+      .number({
+        required_error: messages("Public.color_season_required"),
+        invalid_type_error: messages("Public.color_season_invalid"),
+      })
+      .int()
+      .positive(),
   });
 };
 
-interface CategoryFormProps {
+interface ColorFormProps {
   onSubmit: (data: z.infer<ReturnType<typeof createFormSchema>>) => void;
   onCancel: () => void;
+  colorSeasons: ColorSeason[]
   isEdit?: boolean;
-  initialData?: Partial<CategoryFormValues>;
-  arrangements: string[];
+  initialData?: Partial<ColorFormValues>;
 }
 
-export const CategoryForm = ({
+export const ColorForm = ({
   onSubmit,
   onCancel,
+  colorSeasons,
   isEdit = false,
   initialData,
-  arrangements,
-}: CategoryFormProps) => {
+}: ColorFormProps) => {
   const { t: messages } = useTranslation();
-  const formSchema = createFormSchema(messages, isEdit);
+  const formSchema = createFormSchema(messages);
   type FormValues = z.infer<typeof formSchema>;
 
   const methods = useForm<FormValues>({
@@ -91,11 +75,15 @@ export const CategoryForm = ({
         en: initialData?.name?.en || "",
         ar: initialData?.name?.ar || "",
       },
-      arrangement: initialData?.arrangement ? String(initialData.arrangement) : "",
-      image: initialData?.image || null,
+      code: initialData?.code || "",
+      color_season_id: initialData?.color_season_id || undefined,
     },
   });
+  const { watch, setValue } = methods;
 
+  const selectedColorSeason = watch("color_season_id");
+
+  console.log(colorSeasons)
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
@@ -126,27 +114,37 @@ export const CategoryForm = ({
               </FormItem>
             )}
           />
-        </div>
-
-        {isEdit && (
           <FormField
             control={methods.control}
-            name="arrangement"
+            name="code"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{messages("Public.arrangementLabel")}</FormLabel>
+                <FormLabel>{messages("Public.Code_label")}</FormLabel>
                 <FormControl>
+                  <Input type="color" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={methods.control}
+            name="color_season_id"
+            render={() => (
+              <FormItem>
+                <FormLabel>{messages("Public.ColorSeason_label")}</FormLabel>
+                <FormControl className="w-full">
                   <Select
-                    value={String(field.value)} 
-                    onValueChange={field.onChange}
+                    value={selectedColorSeason?.toString() || ""}
+                    onValueChange={(val) => setValue("color_season_id", Number(val))}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder={messages("Public.selectarrangement")} />
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={messages("Public.SelectColorSeason")} />
                     </SelectTrigger>
                     <SelectContent>
-                      {arrangements.map((arrangement) => (
-                        <SelectItem key={arrangement} value={String(arrangement)}>
-                          {arrangement}
+                      {colorSeasons.map((colorSeason) => (
+                        <SelectItem key={colorSeason.id} value={colorSeason.id.toString()}>
+                          {colorSeason.name.en}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -156,14 +154,9 @@ export const CategoryForm = ({
               </FormItem>
             )}
           />
-        )}
 
-        <ImageUploadInput
-          form={methods}
-          name="image"
-          label={messages("Public.image_label")}
-          existingImageUrl={typeof initialData?.image === "string" ? initialData.image : undefined}
-        />
+
+        </div>
 
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onCancel}>

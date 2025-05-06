@@ -6,56 +6,28 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { MoreHorizontal } from "lucide-react";
 import { TableHeaderSort } from "@/components/datatable/table-header-sort";
 import { useTranslation } from "react-i18next";
-import { Category } from "@/types/api.interfaces";
+import { Brand } from "@/types/api.interfaces";
 import { Toggle } from "@/components/ui/toggle";
 
-type UseCategoryColumnsProps = {
-  handleEdit: (category: Category) => void;
-  handleDelete: (category: Category) => void;
-  handleToggleActive: (category: Category) => void;
+type UseBrandColumnsProps = {
+  handleEdit: (brand: Brand) => void;
+  handleDelete: (brand: Brand) => void;
+  handleToggleActive: (brand: Brand) => void;
 };
 
-export function useCategoryColumns({ handleEdit, handleDelete, handleToggleActive }: UseCategoryColumnsProps): ColumnDef<Category>[] {
+export function useBrandColumns({ handleEdit, handleDelete, handleToggleActive }: UseBrandColumnsProps): ColumnDef<Brand>[] {
   const { t: messages } = useTranslation();
 
   return useMemo(() => [
-    {
-      id: "image",
-      header: messages("Public.Image"),
-      cell: ({ row }) => (
-        <div className="flex justify-center items-center w-20 h-20 overflow-hidden rounded-lg border border-gray-200">
-          <img
-            src={row.original.image}
-            alt={row.original.name.en}
-            className="object-cover w-full h-full"
-          />
-        </div>
-      ),
-    },
     {
       accessorKey: "name",
       header: ({ column }) => <TableHeaderSort column={column} title={messages("Public.Name")} />,
       enableSorting: true,
       cell: ({ row }) => (
         <div className="flex flex-col space-y-1">
-          <div >
-            EN: <span >{row.original.name.en}</span>
+          <div className="">
+            <span className="">{row.original.name}</span>
           </div>
-          <div >
-            AR: <span >{row.original.name.ar}</span>
-          </div>
-        </div>
-      ),
-    }, {
-      accessorKey: "arrangement",
-      header: ({ column }) => <TableHeaderSort column={column} title={messages("Public.arrangementLabel")} />,
-      enableSorting: true,
-      cell: ({ row }) => (
-        <div className="flex flex-col space-y-1">
-          <div >
-            {row.original.arrangement}
-          </div>
-
         </div>
       ),
     },
