@@ -15,11 +15,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 
-type SizeFormValues = {
+type OccupationFormValues = {
   name: Record<string, string>;
+
 };
 
-// Define the schema outside the component
+
 const createFormSchema = (messages: (key: string) => string) => {
 
   return z.object({
@@ -31,19 +32,21 @@ const createFormSchema = (messages: (key: string) => string) => {
   });
 };
 
-interface SizeFormProps {
+interface OccupationFormProps {
   onSubmit: (data: z.infer<ReturnType<typeof createFormSchema>>) => void;
   onCancel: () => void;
   isEdit?: boolean;
-  initialData?: Partial<SizeFormValues>;
+  initialData?: Partial<OccupationFormValues>;
+
 }
 
-export const SizeForm = ({
+export const OccupationForm = ({
   onSubmit,
   onCancel,
   isEdit = false,
   initialData,
-}: SizeFormProps) => {
+
+}: OccupationFormProps) => {
   const { t: messages } = useTranslation();
   const formSchema = createFormSchema(messages);
   type FormValues = z.infer<typeof formSchema>;
@@ -55,7 +58,6 @@ export const SizeForm = ({
         en: initialData?.name?.en || "",
         ar: initialData?.name?.ar || "",
       },
-
     },
   });
 
@@ -90,6 +92,9 @@ export const SizeForm = ({
             )}
           />
         </div>
+
+
+
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onCancel}>
             {messages("actions.cancel")}

@@ -83,7 +83,6 @@ export const ColorForm = ({
 
   const selectedColorSeason = watch("color_season_id");
 
-  console.log(colorSeasons)
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">

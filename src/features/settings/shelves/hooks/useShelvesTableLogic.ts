@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import {
@@ -36,9 +36,6 @@ export function useShelvesTableLogic() {
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [sorting, setSorting] = useState<SortingState>([]);
 
-    useEffect(() => {
-        dispatch(fetchSettings());
-    }, [dispatch]);
 
     const handleEditShelf = (shelf: Shelf) => {
         setEditingShelf(shelf);
@@ -87,6 +84,8 @@ export function useShelvesTableLogic() {
             setEditingShelf(null);
             setIsShelfFormOpen(false);
             refetch();
+            dispatch(fetchSettings());
+
         } catch (error) {
             console.error("Shelf submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));

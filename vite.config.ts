@@ -8,10 +8,15 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 3000,
+    watch: {
+      usePolling: true,
+      interval: 100,
+    },
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  logLevel: 'info',
 })

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import {
@@ -34,9 +34,6 @@ export function useWarehousesTableLogic() {
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [sorting, setSorting] = useState<SortingState>([]);
 
-    useEffect(() => {
-        dispatch(fetchSettings());
-    }, [dispatch]);
 
     const handleEditWarehouse = (warehouse: Warehouse) => {
         setEditingWarehouse(warehouse);
@@ -82,6 +79,8 @@ export function useWarehousesTableLogic() {
             setEditingWarehouse(null);
             setIsWarehouseFormOpen(false);
             refetch();
+            dispatch(fetchSettings());
+
         } catch (error) {
             console.error("Warehouse submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import {
@@ -34,9 +34,6 @@ export function useColorSeasonsTableLogic() {
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [sorting, setSorting] = useState<SortingState>([]);
 
-    useEffect(() => {
-        dispatch(fetchSettings());
-    }, [dispatch]);
 
     const handleEditColorSeason = (colorSeason: ColorSeason) => {
         setEditingColorSeason(colorSeason);
@@ -84,6 +81,8 @@ export function useColorSeasonsTableLogic() {
             setEditingColorSeason(null);
             setIsColorSeasonFormOpen(false);
             refetch();
+        dispatch(fetchSettings());
+
         } catch (error) {
             console.error("ColorSeason submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));

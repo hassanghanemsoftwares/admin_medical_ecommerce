@@ -1,23 +1,23 @@
 import { useMemo } from "react";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";;
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { TableHeaderSort } from "@/components/datatable/table-header-sort";
 import { useTranslation } from "react-i18next";
-import { Size } from "@/types/api.interfaces";
+import { Occupation } from "@/types/api.interfaces";
 
-type UseSizeColumnsProps = {
-  handleEdit: (size: Size) => void;
-  handleDelete: (size: Size) => void;
-  
+type UseOccupationColumnsProps = {
+  handleEdit: (occupation: Occupation) => void;
+  handleDelete: (occupation: Occupation) => void;
 };
 
-export function useSizeColumns({ handleEdit, handleDelete }: UseSizeColumnsProps): ColumnDef<Size>[] {
+export function useOccupationColumns({ handleEdit, handleDelete }: UseOccupationColumnsProps): ColumnDef<Occupation>[] {
   const { t: messages } = useTranslation();
 
   return useMemo(() => [
-     {
+
+    {
       accessorKey: "name",
       header: ({ column }) => <TableHeaderSort column={column} title={messages("Public.Name")} />,
       enableSorting: true,

@@ -18,6 +18,8 @@ import ActivityLogs from "./features/activity-logs";
 import NotFoundError from "./features/errors/not-found-error";
 import AuthLayout from "./features/auth/auth-layout";
 import Categories from "./features/categories";
+import Products from "./features/products";
+import { ProductFormView } from "./features/products/components/form/ProductFormView";
 
 function App() {
   const hasRun = useRef(false);
@@ -109,6 +111,30 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="view-category">
                   <Categories />
+                </ProtectedRoute>
+              }
+            />
+            <ReactRouterRoute
+              path="products"
+              element={
+                <ProtectedRoute requiredPermission="view-product">
+                  <Products />
+                </ProtectedRoute>
+              }
+            />
+            <ReactRouterRoute
+              path="products/new"
+              element={
+                <ProtectedRoute requiredPermission="create-product">
+                  <ProductFormView />
+                </ProtectedRoute>
+              }
+            />
+            <ReactRouterRoute
+              path="products/:id/edit"
+              element={
+                <ProtectedRoute requiredPermission="edit-product">
+                  <ProductFormView />
                 </ProtectedRoute>
               }
             />

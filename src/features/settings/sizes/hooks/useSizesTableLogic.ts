@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import {
@@ -34,9 +34,7 @@ export function useSizesTableLogic() {
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [sorting, setSorting] = useState<SortingState>([]);
 
-    useEffect(() => {
-        dispatch(fetchSettings());
-    }, [dispatch]);
+   
 
     const handleEditSize = (size: Size) => {
         setEditingSize(size);
@@ -69,7 +67,8 @@ export function useSizesTableLogic() {
     const handleSubmitSizeForm = async (data: any) => {
         try {
             const formData = new FormData();
-            formData.append('name', data.name);
+             formData.append('name[en]', data.name.en);
+            formData.append('name[ar]', data.name.ar);
         
             const response = editingSize
                 ? await updateSize(editingSize.id, formData)
@@ -82,6 +81,8 @@ export function useSizesTableLogic() {
             setEditingSize(null);
             setIsSizeFormOpen(false);
             refetch();
+            dispatch(fetchSettings());
+
         } catch (error) {
             console.error("Size submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));

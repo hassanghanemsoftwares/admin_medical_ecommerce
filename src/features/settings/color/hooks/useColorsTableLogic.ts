@@ -35,9 +35,7 @@ export function useColorsTableLogic() {
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [sorting, setSorting] = useState<SortingState>([]);
 
-    useEffect(() => {
-        dispatch(fetchSettings());
-    }, [dispatch]);
+
 
     const handleEditColor = (color: Color) => {
         setEditingColor(color);
@@ -87,6 +85,8 @@ export function useColorsTableLogic() {
             setEditingColor(null);
             setIsColorFormOpen(false);
             refetch();
+            dispatch(fetchSettings());
+
         } catch (error) {
             console.error("Color submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
@@ -105,15 +105,20 @@ export function useColorsTableLogic() {
         order: sorting.length ? (sorting[0].desc ? "desc" : "asc") : undefined,
         search: appliedSearch,
     });
-   const { data :colorSeasonsData,  } = useColorSeasons({
-        page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize,
-        sort: sorting.length ? sorting[0].id : undefined,
-        order: sorting.length ? (sorting[0].desc ? "desc" : "asc") : undefined,
-        search: appliedSearch,
+    const { data: colorSeasonsData, refetch: refetchColorSeasons } = useColorSeasons({
+        page: 1,
+        per_page: 100,
+        sort: undefined,
+        order: undefined,
+        search: "",
     });
- 
-const colorSeasons = colorSeasonsData?.color_seasons;
+    useEffect(() => {
+        if (isColorFormOpen) {
+            refetchColorSeasons();
+        }
+    }, [isColorFormOpen, refetchColorSeasons]);
+    const colorSeasons = colorSeasonsData?.color_seasons;
+
     const table = useReactTable({
         data: data?.colors || [],
         columns,

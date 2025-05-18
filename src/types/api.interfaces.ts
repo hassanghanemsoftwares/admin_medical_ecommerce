@@ -1,6 +1,6 @@
 export interface Session {
   id: string;
-  device: string; 
+  device: string;
   last_activity: number;
   last_activity_human: string;
   ip_address: string;
@@ -51,15 +51,15 @@ export interface Category {
 
 export interface ActivityLog {
   id: number;
-  log_name: string; 
-  description: string; 
+  log_name: string;
+  description: string;
   subject_type: string | null;
   subject_id: number | null;
   causer_type: string | null;
   causer_id: number | null;
   causer_name: string | null;
-  properties: Record<string, any>; 
-  created_at: string; 
+  properties: Record<string, any>;
+  created_at: string;
 }
 
 export interface Role {
@@ -81,7 +81,7 @@ export interface Brand {
 }
 export interface Color {
   id: number;
-  name: Record<string, string>; 
+  name: Record<string, string>;
   code: string;
   color_season_id: number;
   color_season: ColorSeason | null;
@@ -91,7 +91,13 @@ export interface Color {
 
 export interface ColorSeason {
   id: number;
-  name: Record<string, string>; 
+  name: Record<string, string>;
+  created_at: string | null;
+  updated_at: string | null;
+}
+export interface Occupation {
+  id: number;
+  name: Record<string, string>;
   created_at: string | null;
   updated_at: string | null;
 }
@@ -123,7 +129,7 @@ export interface LearningVideo {
 
 export interface Size {
   id: number;
-  name: string;
+  name: Record<string, string>;
   created_at: string | null;
   updated_at: string | null;
 }
@@ -148,6 +154,46 @@ export interface Shelf {
   warehouse: Warehouse | null;
   name: string;
   location: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface Variant {
+  id: number;
+  product_id: number;
+  size: Size;
+  color: Color;
+}
+
+
+export interface ProductImage {
+  id: number;
+  arrangement: string;
+  image: string;
+  is_active: boolean;
+}
+
+
+
+
+export interface Product {
+  id: number;
+  name: Record<string, string>;
+  short_description: Record<string, string>;
+  description: Record<string, string>;
+  barcode: string;
+  slug: string;
+  availability_status: string;
+  category: Category;
+  brand: Brand;
+  price: number;
+  discount: number;
+  min_order_quantity: number;
+  max_order_quantity: number;
+  image: string;
+  images: ProductImage[];
+  variants: Variant[];
+  tags: Tag[];
   created_at: string | null;
   updated_at: string | null;
 }

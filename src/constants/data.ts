@@ -15,7 +15,13 @@ export const navItems: NavItem[] = [
     permission: "view-category",
     shortcut: ['c', 'c'],
   },
-
+  {
+    title: 'Products',
+    url: '/products',
+    icon: 'userPen',
+    permission: "view-product",
+    shortcut: ['p', 'p'],
+  },
   // {
   //   title: 'Accounts',
   //   url: '#',

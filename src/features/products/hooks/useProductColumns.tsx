@@ -1,22 +1,23 @@
 import { useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { TableHeaderSort } from "@/components/datatable/table-header-sort";
 import { useTranslation } from "react-i18next";
-import { Category } from "@/types/api.interfaces";
-import { Toggle } from "@/components/ui/toggle";
+import { Product } from "@/types/api.interfaces";
+import { useNavigate, useParams } from "react-router-dom";
 
-type UseCategoryColumnsProps = {
-  handleEdit: (category: Category) => void;
-  handleDelete: (category: Category) => void;
-  handleToggleActive: (category: Category) => void;
+
+type UseProductColumnsProps = {
+
+  handleDelete: (product: Product) => void;
+
 };
 
-export function useCategoryColumns({ handleEdit, handleDelete, handleToggleActive }: UseCategoryColumnsProps): ColumnDef<Category>[] {
+export function useProductColumns({ handleDelete }: UseProductColumnsProps): ColumnDef<Product>[] {
   const { t: messages } = useTranslation();
+  const navigate = useNavigate();
 
   return useMemo(() => [
     {
@@ -47,38 +48,7 @@ export function useCategoryColumns({ handleEdit, handleDelete, handleToggleActiv
         </div>
       ),
     },
-     {
-      accessorKey: "arrangement",
-      header: ({ column }) => <TableHeaderSort column={column} title={messages("Public.arrangementLabel")} />,
-      enableSorting: true,
-      cell: ({ row }) => (
-        <div className="flex flex-col space-y-1">
-          <div >
-            {row.original.arrangement}
-          </div>
 
-        </div>
-      ),
-    },
-    {
-      accessorKey: "is_active",
-      header: ({ column }) => (
-        <TableHeaderSort column={column} title={messages("Public.Is Active")} />
-      ),
-      enableSorting: true,
-
-      cell: ({ row }) => (
-        <Toggle onClick={() => handleToggleActive(row.original)}>
-
-
-          <Badge variant={row.original.is_active ? "default" : "destructive"}>
-            {row.original.is_active
-              ? messages("Public.Active")
-              : messages("Public.Inactive")}
-          </Badge>
-        </Toggle>
-      ),
-    },
 
     {
       id: "actions",
@@ -91,9 +61,11 @@ export function useCategoryColumns({ handleEdit, handleDelete, handleToggleActiv
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>{messages("Public.Actions")}</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => handleEdit(row.original)}>
+            <DropdownMenuItem onClick={() => navigate(`/products/${row.original.id}/edit`)}>
               {messages("Public.Edit")}
+
             </DropdownMenuItem>
+
             <DropdownMenuItem onClick={() => handleDelete(row.original)} className="text-red-600 focus:text-red-600">
               {messages("Public.Delete")}
             </DropdownMenuItem>
@@ -101,5 +73,5 @@ export function useCategoryColumns({ handleEdit, handleDelete, handleToggleActiv
         </DropdownMenu>
       ),
     },
-  ], [handleEdit, handleDelete, handleToggleActive, messages]);
+  ], [handleDelete, messages]);
 }

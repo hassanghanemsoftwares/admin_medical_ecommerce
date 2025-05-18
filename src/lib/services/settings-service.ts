@@ -16,6 +16,16 @@ export const getAllSettings = async (): Promise<GetAllSettingsResponse> => {
             roles: [],
             permissions: [],
             teams: [],
+            categories: [],
+            brands: [],
+            color_seasons: [],
+            colors: [],
+            configurations: [],
+            occupations: [],
+            shelves: [],
+            sizes: [],
+            tags: [],
+            warehouses: [],
         };
     }
 };

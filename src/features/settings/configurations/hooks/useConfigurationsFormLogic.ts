@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/store/store";
@@ -56,9 +56,7 @@ export function useConfigurationsLogic() {
     const [isConfigFormOpen, setIsConfigFormOpen] = useState(false);
     const [searchInput, setSearchInput] = useState("");
 
-    useEffect(() => {
-        dispatch(fetchSettings());
-    }, [dispatch]);
+
 
     const { data: rawConfigData, isLoading, isError, refetch } = useConfigurations({});
 
@@ -82,6 +80,8 @@ export function useConfigurationsLogic() {
                 toast.success(response.message);
                 setIsConfigFormOpen(false);
                 refetch();
+        dispatch(fetchSettings());
+
             } else {
                 toast.error(response.message);
             }

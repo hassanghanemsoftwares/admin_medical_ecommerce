@@ -10,24 +10,24 @@ import {
 } from "@tanstack/react-table";
 import { AppDispatch } from "@/lib/store/store";
 import { fetchSettings } from "@/lib/store/slices/settingsSlice";
-import { updateTag, createTag, deleteTag } from "@/lib/services/tag-service";
+import { updateOccupation, createOccupation, deleteOccupation } from "@/lib/services/occupations-service";
 import { toast } from "sonner";
-import { Tag } from "@/types/api.interfaces";
+import { Occupation } from "@/types/api.interfaces";
+import { useOccupations } from "./useOccupations";
 import type { SortingState } from "@tanstack/react-table";
-import { useTagColumns } from "./useTagColumns";
-import { useTags } from "./useTags";
+import { useOccupationColumns } from "./useOccupationColumns";
 
-export function useTagsTableLogic() {
+export function useOccupationsTableLogic() {
     const { t: messages } = useTranslation();
     const dispatch = useDispatch<AppDispatch>();
 
 
-    const [isTagFormOpen, setIsTagFormOpen] = useState(false);
-    const [editingTag, setEditingTag] = useState<Tag | null>(null);
-    const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
+    const [isOccupationFormOpen, setIsOccupationFormOpen] = useState(false);
+    const [editingOccupation, setEditingOccupation] = useState<Occupation | null>(null);
+    const [selectedOccupation, setSelectedOccupation] = useState<Occupation | null>(null);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [isDeletingTag, setIsDeletingTag] = useState(false);
+    const [isDeletingOccupation, setIsDeletingOccupation] = useState(false);
 
     const [searchInput, setSearchInput] = useState("");
     const [appliedSearch, setAppliedSearch] = useState("");
@@ -36,65 +36,66 @@ export function useTagsTableLogic() {
 
 
 
-    const handleEditTag = (tag: Tag) => {
-        setEditingTag(tag);
-        setIsTagFormOpen(true);
+    const handleEditOccupation = (occupation: Occupation) => {
+        setEditingOccupation(occupation);
+        setIsOccupationFormOpen(true);
     };
 
-    const handledeleteTagClick = (tag: Tag) => {
-        setSelectedTag(tag);
+    const handledeleteOccupationClick = (occupation: Occupation) => {
+        setSelectedOccupation(occupation);
         setDeleteDialogOpen(true);
     };
 
-
-    const handleConfirmdeleteTag = async () => {
-        if (!selectedTag) return;
-        setIsDeletingTag(true);
+    const handleConfirmdeleteOccupation = async () => {
+        if (!selectedOccupation) return;
+        setIsDeletingOccupation(true);
         try {
-            const response = await deleteTag(selectedTag.id);
+            const response = await deleteOccupation(selectedOccupation.id);
             response.result
                 ? toast.success(response.message)
                 : toast.error(response.message);
         } catch {
-            toast.error(messages("Tags.DeleteFailed"));
+            toast.error(messages("Occupations.DeleteFailed"));
         } finally {
-            setIsDeletingTag(false);
+            setIsDeletingOccupation(false);
             setDeleteDialogOpen(false);
             refetch();
         }
     };
 
-    const handleSubmitTagForm = async (data: any) => {
+
+
+    const handleSubmitOccupationForm = async (data: any) => {
         try {
             const formData = new FormData();
-            formData.append('name', data.name);
+            formData.append('name[en]', data.name.en);
+            formData.append('name[ar]', data.name.ar);
 
-            const response = editingTag
-                ? await updateTag(editingTag.id, formData)
-                : await createTag(formData);
+            const response = editingOccupation
+                ? await updateOccupation(editingOccupation.id, formData)
+                : await createOccupation(formData);
 
             response.result
                 ? toast.success(response.message)
                 : toast.error(response.message);
 
-            setEditingTag(null);
-            setIsTagFormOpen(false);
+            setEditingOccupation(null);
+            setIsOccupationFormOpen(false);
             refetch();
             dispatch(fetchSettings());
 
         } catch (error) {
-            console.error("Tag submission failed:", error);
+            console.error("Occupation submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };
 
-    const columns = useTagColumns({
-        handleEdit: handleEditTag,
-        handleDelete: handledeleteTagClick,
-
+    const columns = useOccupationColumns({
+        handleEdit: handleEditOccupation,
+        handleDelete: handledeleteOccupationClick,
     });
 
-    const { data, isLoading, isError, refetch } = useTags({
+    const { data, isLoading, isError, refetch } = useOccupations({
         page: pagination.pageIndex + 1,
         per_page: pagination.pageSize,
         sort: sorting.length ? sorting[0].id : undefined,
@@ -102,10 +103,8 @@ export function useTagsTableLogic() {
         search: appliedSearch,
     });
 
-
-
     const table = useReactTable({
-        data: data?.tags || [],
+        data: data?.occupation || [],
         columns,
         pageCount: data?.pagination?.last_page || -1,
         state: { sorting, pagination, globalFilter: appliedSearch },
@@ -140,19 +139,19 @@ export function useTagsTableLogic() {
         handleRefresh,
         setSearchInput,
         searchInput,
-        setIsTagFormOpen,
-        isTagFormOpen,
-        editingTag,
-        setEditingTag,
-        handleSubmitTagForm,
+        setIsOccupationFormOpen,
+        isOccupationFormOpen,
+        editingOccupation,
+        setEditingOccupation,
+        handleSubmitOccupationForm,
 
         deleteDialogProps: {
             open: deleteDialogOpen,
             onClose: () => setDeleteDialogOpen(false),
-            onConfirm: handleConfirmdeleteTag,
-            loading: isDeletingTag,
-            title: messages("Tags.Delete Tag"),
-            description: messages("Tags.Delete confirm"),
+            onConfirm: handleConfirmdeleteOccupation,
+            loading: isDeletingOccupation,
+            title: messages("Occupations.Delete Occupation"),
+            description: messages("Occupations.Delete confirm"),
         },
     };
 }

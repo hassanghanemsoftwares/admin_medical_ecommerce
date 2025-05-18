@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import {
@@ -37,9 +37,7 @@ export function useCategoriesTableLogic() {
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
     const [sorting, setSorting] = useState<SortingState>([]);
 
-    useEffect(() => {
-        dispatch(fetchSettings());
-    }, [dispatch]);
+   
 
     const handleEditCategory = (category: Category) => {
         setEditingCategory(category);
@@ -148,6 +146,7 @@ export function useCategoriesTableLogic() {
             setEditingCategory(null);
             setIsCategoryFormOpen(false);
             refetch();
+            dispatch(fetchSettings());
         } catch (error) {
             console.error("Category submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
