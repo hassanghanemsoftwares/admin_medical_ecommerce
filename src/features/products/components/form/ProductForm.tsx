@@ -21,6 +21,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEffect } from "react";
 import { ProductImagesInput } from "../ProductImagesInput";
 import { ProductVariants } from "../ProductVariants";
+import BarcodeInput from "@/components/BarcodeInput";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export type ProductFormValues = {
   name: Record<string, string>;
@@ -68,29 +70,29 @@ const createFormSchema = (messages: (key: string) => string, isEdit: boolean) =>
     ? z.array(imageItemSchema).optional()
     : z.array(imageItemSchema).min(1, { message: messages("Public.image_required") });
 
-  const variantsSchema = z
-    .array(
-      z.object({
-        size_id: z.number({ required_error: messages("Public.size_required") }),
-        color_id: z.number({ required_error: messages("Public.color_required") }),
-      })
-    )
-    .optional()
-    .refine(
-      (variants) => {
-        if (!variants) return true;
-        const seen = new Set();
-        for (const v of variants) {
-          const key = `${v.size_id}-${v.color_id}`;
-          if (seen.has(key)) return false;
-          seen.add(key);
-        }
-        return true;
-      },
-      {
-        message: messages("Public.duplicate_variant"),
+const variantsSchema = z
+  .array(
+    z.object({
+      size_id: z.number().nullable().optional(),
+      color_id: z.number().nullable().optional(),
+    })
+  )
+  .optional()
+  .refine(
+    (variants) => {
+      if (!variants) return true;
+      const seen = new Set();
+      for (const v of variants) {
+        const key = `${v.size_id ?? "null"}-${v.color_id ?? "null"}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
       }
-    );
+      return true;
+    },
+    {
+      message: messages("Public.duplicate_variant"),
+    }
+  );
 
   return z.object({
     name: z.object({
@@ -133,8 +135,8 @@ interface ProductFormProps {
   onCancel: () => void;
   onExistingImageUpdate: (productImageId: number, data: { arrangement: number; is_active?: boolean }) => Promise<{ result: boolean; message?: string }>;
   onExistingImageDelete: (productImageId: number) => Promise<{ result: boolean; message?: string }>;
-
   onExistingVariantDelete: (productVariantId: number) => Promise<{ result: boolean; message?: string }>;
+  onGenerateBarcode: () => Promise<string | null>;
   isEdit?: boolean;
   initialData?: Partial<ProductFormValues>;
   colors: Color[];
@@ -142,6 +144,7 @@ interface ProductFormProps {
   tags: Tag[];
   categories: Category[];
   brands: Brand[];
+  missingItems: String[];
 }
 
 export const ProductForm = ({
@@ -150,13 +153,14 @@ export const ProductForm = ({
   onExistingImageUpdate,
   onExistingImageDelete,
   onExistingVariantDelete,
+  onGenerateBarcode,
   isEdit = false,
   initialData,
   colors,
   sizes,
   tags,
   categories,
-  brands,
+  brands, missingItems
 }: ProductFormProps) => {
   const { t: messages } = useTranslation();
   const formSchema = createFormSchema(messages, isEdit);
@@ -206,310 +210,321 @@ export const ProductForm = ({
 
 
   return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(
-          onSubmit,
+    <div className="h-full w-full flex items-center justify-center mb-5 p-7">
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="text-2xl">  {isEdit ? messages("Product.edit_title") : messages("Product.create_title")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {(missingItems.length > 0) ? <div className="text-red-500 space-y-1 bg-red-50 border border-red-300 p-4 rounded-md">
+            <p className="font-semibold">{messages("Public.missing_required_data")}</p>
+            <ul className="list-disc list-inside">
+              {missingItems.map((msg, i) => (
+                <li key={i}>{msg}</li>
+              ))}
+            </ul>
+          </div> : (
+            <FormProvider {...methods}>
+              <form
+                onSubmit={methods.handleSubmit(
+                  onSubmit,
 
-        )}
-        className="space-y-4"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {(["en", "ar"] as const).map((lang) => (
-            <FormField
-              key={lang}
-              control={methods.control}
-              name={`name.${lang}`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{messages(`Public.name_${lang}_label`)}</FormLabel>
-                  <FormControl>
-                    <Input {...field} dir={lang === "ar" ? "rtl" : "ltr"} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-        </div>
+                )}
+                className="space-y-4"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {(["en", "ar"] as const).map((lang) => (
+                    <FormField
+                      key={lang}
+                      control={methods.control}
+                      name={`name.${lang}`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{messages(`Public.name_${lang}_label`)}</FormLabel>
+                          <FormControl>
+                            <Input {...field} dir={lang === "ar" ? "rtl" : "ltr"} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+                </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {(["en", "ar"] as const).map((lang) => (
-            <FormField
-              key={lang}
-              control={methods.control}
-              name={`short_description.${lang}`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{messages(`Public.short_description_${lang}_label`)}</FormLabel>
-                  <FormControl>
-                    <Input {...field} dir={lang === "ar" ? "rtl" : "ltr"} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-        </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {(["en", "ar"] as const).map((lang) => (
+                    <FormField
+                      key={lang}
+                      control={methods.control}
+                      name={`short_description.${lang}`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{messages(`Public.short_description_${lang}_label`)}</FormLabel>
+                          <FormControl>
+                            <Input {...field} dir={lang === "ar" ? "rtl" : "ltr"} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+                </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {(["en", "ar"] as const).map((lang) => (
-            <FormField
-              key={lang}
-              control={methods.control}
-              name={`description.${lang}`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{messages(`Public.description_${lang}_label`)}</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} dir={lang === "ar" ? "rtl" : "ltr"} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-        </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {(["en", "ar"] as const).map((lang) => (
+                    <FormField
+                      key={lang}
+                      control={methods.control}
+                      name={`description.${lang}`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{messages(`Public.description_${lang}_label`)}</FormLabel>
+                          <FormControl>
+                            <Textarea {...field} dir={lang === "ar" ? "rtl" : "ltr"} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+                </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={methods.control}
-            name="barcode"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{messages("Public.barcode")}</FormLabel>
-                <FormControl><Input {...field} /></FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={methods.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{messages("Public.price")}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    {...field}
-                    onChange={(e) => field.onChange(e.target.value === "" ? "" : Number(e.target.value))}
-                    value={field.value}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <BarcodeInput onGenerateBarcode={onGenerateBarcode} />
+
+                  <FormField
+                    control={methods.control}
+                    name="price"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{messages("Public.price")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value === "" ? "" : Number(e.target.value))}
+                            value={field.value}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={methods.control}
-            name="discount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{messages("Public.discount")}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    onChange={(e) => field.onChange(e.target.value === "" ? "" : Number(e.target.value))}
-                    value={field.value}
+                  <FormField
+                    control={methods.control}
+                    name="discount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{messages("Public.discount")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value === "" ? "" : Number(e.target.value))}
+                            value={field.value}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={methods.control}
-            name="min_order_quantity"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{messages("Public.min_order_quantity")}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    onChange={(e) => field.onChange(e.target.value === "" ? "" : Number(e.target.value))}
-                    value={field.value}
+                  <FormField
+                    control={methods.control}
+                    name="min_order_quantity"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{messages("Public.min_order_quantity")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value === "" ? "" : Number(e.target.value))}
+                            value={field.value}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={methods.control}
-            name="max_order_quantity"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{messages("Public.max_order_quantity")}</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    {...field}
-                    onChange={(e) => field.onChange(e.target.value === "" ? "" : Number(e.target.value))}
-                    value={field.value}
+                  <FormField
+                    control={methods.control}
+                    name="max_order_quantity"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{messages("Public.max_order_quantity")}</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value === "" ? "" : Number(e.target.value))}
+                            value={field.value}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
-          <FormField
-            control={methods.control}
-            name="availability_status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{messages("Public.availability_status")}</FormLabel>
-                <FormControl className="w-full">
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={initialData?.availability_status?.toString()}
+                  <FormField
+                    control={methods.control}
+                    name="availability_status"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{messages("Public.availability_status")}</FormLabel>
+                        <FormControl className="w-full">
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                            defaultValue={initialData?.availability_status?.toString()}
 
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={messages("Public.select_status")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {["available", "coming_soon", "discontinued", "pre_order"].map(status => (
-                        <SelectItem key={status} value={status}>
-                          {messages(`Product.status.${status}`)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={methods.control}
-            name="category_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{messages("Public.category")}</FormLabel>
-                <FormControl className="w-full">
-                  <Select
-                    onValueChange={(val) => field.onChange(Number(val))}
-                    value={field.value?.toString()}
-                    defaultValue={initialData?.category_id?.toString()}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={messages("Public.select_category")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id.toString()}>
-                          {category.name.en}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={methods.control}
-            name="brand_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{messages("Public.brand")}</FormLabel>
-                <FormControl className="w-full">
-                  <Select
-                    onValueChange={(val) => field.onChange(Number(val))}
-                    value={field.value?.toString()}
-                    defaultValue={initialData?.brand_id?.toString()}
-
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder={messages("Public.select_brand")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {brands.map((brand) => (
-                        <SelectItem key={brand.id} value={brand.id.toString()}>
-                          {brand.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={methods.control}
-            name="tags"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{messages("Public.tags")}</FormLabel>
-                <FormControl>
-                  <MultiSelect
-                    options={tags.map(tag => ({ label: tag.name, value: tag.id }))}
-                    value={field.value ?? []}
-                    onChange={field.onChange}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder={messages("Public.select_status")} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {["available", "coming_soon", "discontinued", "pre_order"].map(status => (
+                                <SelectItem key={status} value={status}>
+                                  {messages(`Product.status.${status}`)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+                </div>
 
-        <ProductImagesInput
-          key={JSON.stringify(initialData?.images)}
-          form={methods}
-          name="images"
-          label={messages("Public.images")}
-          onExistingImageDelete={onExistingImageDelete}
-          onExistingImageUpdate={onExistingImageUpdate}
-          existingImages={
-            Array.isArray(initialData?.images)
-              ? initialData.images
-                .filter((img): img is ProductImage =>
-                  img !== null &&
-                  typeof img === "object" &&
-                  "id" in img &&
-                  "image" in img
-                )
-                .map((img) => ({
-                  id: img.id,
-                  url: img.image,
-                  is_active: img.is_active,
-                  arrangement: Number(img.arrangement) || 1,
-                }))
-              : []
-          }
-        />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={methods.control}
+                    name="category_id"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{messages("Public.category")}</FormLabel>
+                        <FormControl className="w-full">
+                          <Select
+                            onValueChange={(val) => field.onChange(Number(val))}
+                            value={field.value?.toString()}
+                            defaultValue={initialData?.category_id?.toString()}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder={messages("Public.select_category")} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categories.map((category) => (
+                                <SelectItem key={category.id} value={category.id.toString()}>
+                                  {category.name.en}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={methods.control}
+                    name="brand_id"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{messages("Public.brand")}</FormLabel>
+                        <FormControl className="w-full">
+                          <Select
+                            onValueChange={(val) => field.onChange(Number(val))}
+                            value={field.value?.toString()}
+                            defaultValue={initialData?.brand_id?.toString()}
 
-        <ProductVariants
-          colors={colors}
-          sizes={sizes}
-          existingVariants={initialData?.variants}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder={messages("Public.select_brand")} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {brands.map((brand) => (
+                                <SelectItem key={brand.id} value={brand.id.toString()}>
+                                  {brand.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-          onExistingVariantDelete={onExistingVariantDelete}
-        />
+                  <FormField
+                    control={methods.control}
+                    name="tags"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{messages("Public.tags")}</FormLabel>
+                        <FormControl>
+                          <MultiSelect
+                            options={tags.map(tag => ({ label: tag.name, value: tag.id }))}
+                            value={field.value ?? []}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <ProductImagesInput
+                  key={JSON.stringify(initialData?.images)}
+                  form={methods}
+                  name="images"
+                  label={messages("Public.images")}
+                  onExistingImageDelete={onExistingImageDelete}
+                  onExistingImageUpdate={onExistingImageUpdate}
+                  existingImages={
+                    Array.isArray(initialData?.images)
+                      ? initialData.images
+                        .filter((img): img is ProductImage =>
+                          img !== null &&
+                          typeof img === "object" &&
+                          "id" in img &&
+                          "image" in img
+                        )
+                        .map((img) => ({
+                          id: img.id,
+                          url: img.image,
+                          is_active: img.is_active,
+                          arrangement: Number(img.arrangement) || 1,
+                        }))
+                      : []
+                  }
+                />
+
+                <ProductVariants
+                  colors={colors}
+                  sizes={sizes}
+                  existingVariants={initialData?.variants}
+                  onExistingVariantDelete={onExistingVariantDelete}
+                />
 
 
-        <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            {messages("actions.cancel")}
-          </Button>
-          <Button type="submit">
-            {isEdit ? messages("actions.update") : messages("actions.create")}
-          </Button>
-        </div>
-      </form>
-    </FormProvider>
+                <div className="flex justify-end gap-2">
+                  <Button type="button" variant="outline" onClick={onCancel}>
+                    {messages("actions.cancel")}
+                  </Button>
+                  <Button type="submit">
+                    {isEdit ? messages("actions.update") : messages("actions.create")}
+                  </Button>
+                </div>
+              </form>
+            </FormProvider>)}
+
+        </CardContent>
+      </Card>
+    </div>
   );
 };
+
+
+

@@ -84,7 +84,6 @@ export function useColorSeasonsTableLogic() {
         dispatch(fetchSettings());
 
         } catch (error) {
-            console.error("ColorSeason submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };

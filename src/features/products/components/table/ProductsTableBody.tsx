@@ -34,7 +34,7 @@ export function ProductsTableBody({ table, columns, isLoading, search, messages 
         ) : (
           <TableNoResults
             colSpan={columns.length}
-            message={search ? messages("Products.noSearchResults") : messages("Products.noResults")}
+            message={search ? messages("Product.noSearchResults") : messages("Product.noResults")}
           />
         )}
       </TableBody>

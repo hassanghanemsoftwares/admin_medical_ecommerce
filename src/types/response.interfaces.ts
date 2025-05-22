@@ -1,4 +1,4 @@
-import { ActivityLog, Brand, Category, Color, ColorSeason, Configuration, HomeSection, LearningVideo, Occupation, Pagination, Permission, Product, Role, Shelf, Size, Tag, Team, User, Warehouse } from "./api.interfaces";
+import { ActivityLog, Brand, Category, Color, ColorSeason, Configuration, HomeSection, LearningVideo, Occupation, Pagination, Permission, Product, ProductVariant, Role, Shelf, Size, Stock, StockAdjustment, Tag, Team, User, Warehouse } from "./api.interfaces";
 
 export interface LoginResponse {
   result: boolean;
@@ -80,7 +80,7 @@ export interface GetColorSeasonsResponse {
 export interface GetOccupationsResponse {
   result: boolean;
   message: string;
-  occupation: Occupation[];
+  occupations: Occupation[];
   pagination: Pagination;
 }
 
@@ -144,4 +144,24 @@ export interface GetProductResponse {
 
 }
 
+
+export interface GetStockAdjustmentsResponse {
+  result: boolean;
+  message: string;
+  adjustments: StockAdjustment[];
+  pagination: Pagination;
+}
+
+export interface GetStocksResponse {
+  result: boolean;
+  message: string;
+  stocks: Stock[];
+  pagination: Pagination;
+}
+
+export interface GetProductVariantsResponse {
+  result: boolean;
+  message: string;
+  productVariants: ProductVariant[];
+}
 

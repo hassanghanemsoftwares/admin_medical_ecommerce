@@ -197,3 +197,35 @@ export interface Product {
   created_at: string | null;
   updated_at: string | null;
 }
+
+export interface StockAdjustment {
+  id: number;
+  product_info: String;
+
+  variant: Variant;
+  warehouse: Warehouse;
+  shelf: Shelf | null;
+  type: string;
+  quantity: number;
+  cost_per_item: number | null;
+  reason: string | null;
+  reference_type: string | null;
+  reference_id: number | null;
+  adjusted_by: User | null;
+  created_at: string;
+}
+export interface Stock {
+  id: number;
+  product_info: String;
+  warehouse: Warehouse;
+  shelf: Shelf | null;
+  quantity: number;
+}
+
+export interface ProductVariant {
+  id: number;
+  product_info: String;
+  product: Product;
+  size: Size;
+  color: Color;
+}

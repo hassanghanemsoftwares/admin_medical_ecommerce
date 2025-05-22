@@ -71,7 +71,6 @@ export function useBrandsTableLogic() {
 
     const handleConfirmToggleStatus = async () => {
         if (!selectedBrand) {
-            console.error("No brand selected for status toggle");
             return;
         }
 
@@ -79,7 +78,7 @@ export function useBrandsTableLogic() {
 
         try {
             const newStatus = !selectedBrand.is_active;
-            console.log(`Updating brand ${selectedBrand.id} status to: ${newStatus}`);
+          
 
             const formData = new FormData();
             formData.append('is_active', newStatus ? '1' : '0');
@@ -97,7 +96,6 @@ export function useBrandsTableLogic() {
                 toast.error(response.message || messages("Brands.StatusUpdateFailed"));
             }
         } catch (error) {
-            console.error("Error toggling brand status:", error);
             toast.error(messages("Brands.StatusUpdateFailed"));
         } finally {
             setIsTogglingStatus(false);
@@ -127,7 +125,6 @@ export function useBrandsTableLogic() {
         dispatch(fetchSettings());
 
         } catch (error) {
-            console.error("Brand submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };

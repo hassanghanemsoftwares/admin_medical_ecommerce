@@ -80,7 +80,7 @@ export function useUsersTableLogic() {
             const response = await updateUser(selectedUser.id, {
                 is_active: !selectedUser.is_active,
             });
-            console.log(response.result)
+         
             response.result
                 ? toast.success(response.message)
                 : toast.error(response.message);
@@ -107,7 +107,6 @@ export function useUsersTableLogic() {
             setIsUserFormOpen(false);
             refetch();
         } catch (error) {
-            console.error("User submission failed:", error);
             toast.error(messages("Users.UnexpectedError"));
         }
     };

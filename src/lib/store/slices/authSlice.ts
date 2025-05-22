@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { User } from "@/types/apiTypes";
+import { User } from "@/types/api.interfaces";
 import { signOutRequest } from "@/lib/services/profile-service";
 
 

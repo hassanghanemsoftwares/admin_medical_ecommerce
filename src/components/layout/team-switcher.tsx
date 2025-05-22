@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { Team } from '@/types/apiTypes'
+import { Team } from '@/types/api.interfaces'
 import Cookies from 'js-cookie'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'

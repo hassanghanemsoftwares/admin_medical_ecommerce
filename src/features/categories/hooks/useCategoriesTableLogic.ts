@@ -73,7 +73,6 @@ export function useCategoriesTableLogic() {
 
     const handleConfirmToggleStatus = async () => {
         if (!selectedCategory) {
-            console.error("No category selected for status toggle");
             return;
         }
 
@@ -81,7 +80,7 @@ export function useCategoriesTableLogic() {
 
         try {
             const newStatus = !selectedCategory.is_active;
-            console.log(`Updating category ${selectedCategory.id} status to: ${newStatus}`);
+          
 
             const formData = new FormData();
             formData.append('is_active', newStatus ? '1' : '0');
@@ -95,7 +94,7 @@ export function useCategoriesTableLogic() {
                 throw new Error("Empty response received");
             }
 
-            console.log("Status toggle response:", response);
+          
 
             if (response.result) {
                 toast.success(response.message || messages("Categories.StatusUpdateSuccess"));
@@ -103,7 +102,6 @@ export function useCategoriesTableLogic() {
                 toast.error(response.message || messages("Categories.StatusUpdateFailed"));
             }
         } catch (error) {
-            console.error("Error toggling category status:", error);
             toast.error(messages("Categories.StatusUpdateFailed"));
         } finally {
             setIsTogglingStatus(false);
@@ -148,7 +146,6 @@ export function useCategoriesTableLogic() {
             refetch();
             dispatch(fetchSettings());
         } catch (error) {
-            console.error("Category submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };

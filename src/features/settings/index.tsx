@@ -1,13 +1,24 @@
+import { Suspense, lazy } from 'react';
 import { Main } from '@/components/layout/main';
-import { BrandsTable } from './brands/components/table/BrandsTable';
-import { ColorSeasonsTable } from './color-seasons/components/table/ColorSeasonsTable';
-import { ColorsTable } from './color/components/table/ColorsTable';
-import { SizesTable } from './sizes/components/table/SizesTable';
-import { TagsTable } from './tags/components/table/TagsTable';
-import { WarehousesTable } from './warehouses/components/table/WarehousesTable';
-import { ShelvesTable } from './shelves/components/table/ShelvesTable';
 import ConfigurationView from './configurations/components/form/ConfigurationView';
-import { OccupationsTable } from './occupations/components/table/OccupationsTable';
+import Spinner from '@/components/spinner';
+
+// Lazy load table components
+const BrandsTable = lazy(() => import('./brands/components/table/BrandsTable'));
+const ColorSeasonsTable = lazy(() => import('./color-seasons/components/table/ColorSeasonsTable'));
+const ColorsTable = lazy(() => import('./color/components/table/ColorsTable'));
+const SizesTable = lazy(() => import('./sizes/components/table/SizesTable'));
+const TagsTable = lazy(() => import('./tags/components/table/TagsTable'));
+const WarehousesTable = lazy(() => import('./warehouses/components/table/WarehousesTable'));
+const ShelvesTable = lazy(() => import('./shelves/components/table/ShelvesTable'));
+const OccupationsTable = lazy(() => import('./occupations/components/table/OccupationsTable'));
+
+// Centered fallback
+const CenteredSpinner = () => (
+  <div className="flex items-center justify-center h-40 w-full">
+    <Spinner />
+  </div>
+);
 
 export default function Settings() {
   return (
@@ -16,30 +27,14 @@ export default function Settings() {
         <ConfigurationView />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="w-full">
-          <BrandsTable />
-        </div>
-        <div className="w-full">
-          <ColorSeasonsTable />
-        </div>
-        <div className="w-full">
-          <ColorsTable />
-        </div>
-        <div className="w-full">
-          <SizesTable />
-        </div>
-        <div className="w-full">
-          <TagsTable />
-        </div>
-        <div className="w-full">
-          <WarehousesTable />
-        </div>
-        <div className="w-full">
-          <ShelvesTable />
-        </div>
-        <div className="w-full">
-          <OccupationsTable />
-        </div>
+        <Suspense fallback={<CenteredSpinner />}><BrandsTable /></Suspense>
+        <Suspense fallback={<CenteredSpinner />}><ColorSeasonsTable /></Suspense>
+        <Suspense fallback={<CenteredSpinner />}><ColorsTable /></Suspense>
+        <Suspense fallback={<CenteredSpinner />}><SizesTable /></Suspense>
+        <Suspense fallback={<CenteredSpinner />}><TagsTable /></Suspense>
+        <Suspense fallback={<CenteredSpinner />}><WarehousesTable /></Suspense>
+        <Suspense fallback={<CenteredSpinner />}><ShelvesTable /></Suspense>
+        <Suspense fallback={<CenteredSpinner />}><OccupationsTable /></Suspense>
       </div>
     </Main>
   );

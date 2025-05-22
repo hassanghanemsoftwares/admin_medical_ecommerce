@@ -127,7 +127,6 @@ export const ProductImagesInput = ({
           return;
         }
       } catch (error) {
-        console.error("Failed to delete image:", error);
         return;
       }
     }
@@ -172,7 +171,6 @@ export const ProductImagesInput = ({
         setImages(updated);
         updateFormImages(updated);
       } catch (error) {
-        console.error("Failed to update arrangement:", error);
       }
     } else {
       setImages(updated);
@@ -196,7 +194,6 @@ export const ProductImagesInput = ({
         setImages(updated);
         updateFormImages(updated);
       } catch (error) {
-        console.error("Failed to update is_active:", error);
       }
     } else {
       const updated = [...images];

@@ -6,7 +6,7 @@ import { useOccupationsTableLogic } from "../../hooks/useOccupationsTableLogic";
 import { OccupationsTableDialogs } from "./OccupationsTableDialogs";
 
 
-export function OccupationsTable() {
+export default  function OccupationsTable() {
   const {
     table,
     columns,

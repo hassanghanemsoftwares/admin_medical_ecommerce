@@ -19,8 +19,7 @@ const onRequest = async (config: InternalAxiosRequestConfig): Promise<InternalAx
         Authorization: token ? `Bearer ${token}` : "",
         "X-Team-ID": team,
         "Accept-Language": language,
-     
-        'App-key':APP_KEY ,
+        'App-key': APP_KEY,
         'agent': userAgent,
         ...config.headers,
     });
@@ -29,4 +28,5 @@ const onRequest = async (config: InternalAxiosRequestConfig): Promise<InternalAx
 };
 
 axiosInstance.interceptors.request.use(onRequest);
+
 export default axiosInstance;

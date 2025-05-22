@@ -82,7 +82,6 @@ export function useWarehousesTableLogic() {
             dispatch(fetchSettings());
 
         } catch (error) {
-            console.error("Warehouse submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };

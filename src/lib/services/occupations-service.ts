@@ -13,7 +13,7 @@ export const getOccupations = async (params: Record<string, any>): Promise<GetOc
         return {
             result: false,
             message: error?.response?.data?.message || "Failed to fetch Occupations",
-            occupation: [],
+            occupations: [],
             pagination: { total: 0, per_page: 10, current_page: 1, last_page: 1 },
         };
     }

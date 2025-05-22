@@ -85,7 +85,6 @@ export function useOccupationsTableLogic() {
             dispatch(fetchSettings());
 
         } catch (error) {
-            console.error("Occupation submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };
@@ -104,7 +103,7 @@ export function useOccupationsTableLogic() {
     });
 
     const table = useReactTable({
-        data: data?.occupation || [],
+        data: data?.occupations || [],
         columns,
         pageCount: data?.pagination?.last_page || -1,
         state: { sorting, pagination, globalFilter: appliedSearch },

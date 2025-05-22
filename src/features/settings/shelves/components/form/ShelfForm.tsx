@@ -46,7 +46,7 @@ const createFormSchema = (messages: (key: string) => string) => {
 interface ShelfFormProps {
   onSubmit: (data: z.infer<ReturnType<typeof createFormSchema>>) => void;
   onCancel: () => void;
-  warehouses: Warehouse[]
+  warehouses: Warehouse[];
   isEdit?: boolean;
   initialData?: Partial<ShelfFormValues>;
 }
@@ -74,7 +74,6 @@ export const ShelfForm = ({
 
   const selectedWarehouse = watch("warehouse_id");
 
-  console.log(warehouses)
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">

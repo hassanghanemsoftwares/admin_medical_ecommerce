@@ -6,7 +6,7 @@ import { ShelvesTableDialogs } from "./ShelvesTableDialogs";
 import { ShelvesTableHeader } from "./ShelvesTableHeader";
 
 
-export function ShelvesTable() {
+export default  function ShelvesTable() {
   const {
     table,
     columns,

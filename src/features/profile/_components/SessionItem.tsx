@@ -1,5 +1,5 @@
 import { Dot } from "lucide-react";
-import { Session } from "@/types/apiTypes";
+import { Session } from "@/types/api.interfaces";
 import ConfirmPasswordDialog from "./ConfirmPasswordDialog";
 import { useTranslation } from "react-i18next";
 import { getDeviceIcon } from "@/components/getDeviceIcon";

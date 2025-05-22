@@ -6,7 +6,7 @@ import { ColorSeasonsTableDialogs } from "./ColorSeasonsTableDialogs";
 import { ColorSeasonsTableHeader } from "./ColorSeasonsTableHeader";
 
 
-export function ColorSeasonsTable() {
+export default  function ColorSeasonsTable() {
   const {
     table,
     columns,

@@ -23,7 +23,6 @@ export function SearchProvider({ children }: Props) {
   const navigate = useNavigate()
   const user = useSelector((state: RootState) => state.auth.user);
 
-  // Flatten all nav items (including nested) and profile dropdown items
   const flattenNavItems = (items: NavItem[]): { url: string, shortcut: string[], permission: string }[] => {
     return items.reduce<{ url: string, shortcut: string[], permission: string }[]>((acc, item) => {
       if (item.items && item.items.length > 0) {
@@ -41,7 +40,7 @@ export function SearchProvider({ children }: Props) {
     .map(item => ({
       url: item.to,
       shortcut: item.shortcut,
-      permission:item.permission
+      permission: item.permission
     }))
 
   const allShortcutItems = [
@@ -50,36 +49,82 @@ export function SearchProvider({ children }: Props) {
   ]
 
   React.useEffect(() => {
+    let keySequence: string[] = []
+    let ctrlOrMetaPressed = false
+    let timeout: NodeJS.Timeout | null = null
+
+    const reset = () => {
+      keySequence = []
+      ctrlOrMetaPressed = false
+      if (timeout) clearTimeout(timeout)
+      timeout = null
+    }
+
     const down = (e: KeyboardEvent) => {
-      // Command menu toggle
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen((open) => !open)
+      if (document.activeElement instanceof HTMLInputElement) return
+
+      // Detect Ctrl or Meta key press
+      if (e.key === 'Control' || e.key === 'Meta') {
+        ctrlOrMetaPressed = true
         return
       }
 
-      // Don't trigger if typing in an input
-      if (document.activeElement instanceof HTMLInputElement) return
+      // Open CommandMenu on Ctrl+K
+      if (e.key === 'k' && ctrlOrMetaPressed) {
+        e.preventDefault()
+        setOpen((open) => !open)
+        reset()
+        return
+      }
 
-      // Global shortcuts (double key press) and check permissions
-      if (!e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey) {
+      // If Ctrl/Meta is pressed and a letter is typed
+      if (ctrlOrMetaPressed) {
+        const key = e.key.toLowerCase()
+
+        keySequence.push(key)
+
+        // Keep max 2 keys in the sequence
+        if (keySequence.length > 2) {
+          keySequence.shift()
+        }
+
         const matchingItem = allShortcutItems.find(
           item =>
-            item.shortcut.length === 2 &&
-            item.shortcut[0] === e.key.toLowerCase() &&
+            item.shortcut[0] === keySequence[0] &&
+            item.shortcut[1] === keySequence[1] &&
             (item.permission ? user?.permissions.includes(item.permission) : true)
         )
 
         if (matchingItem) {
           e.preventDefault()
           navigate(matchingItem.url)
+          reset()
+          return
         }
+
+        // Set/reset timeout to clear sequence after 1 second
+        if (timeout) clearTimeout(timeout)
+        timeout = setTimeout(reset, 1000)
+      }
+    }
+
+    const up = (e: KeyboardEvent) => {
+      if (e.key === 'Control' || e.key === 'Meta') {
+        ctrlOrMetaPressed = false
+        keySequence = []
       }
     }
 
     document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
+    document.addEventListener('keyup', up)
+
+    return () => {
+      document.removeEventListener('keydown', down)
+      document.removeEventListener('keyup', up)
+      if (timeout) clearTimeout(timeout)
+    }
   }, [navigate, allShortcutItems, user?.permissions])
+
 
   return (
     <SearchContext.Provider value={{ open, setOpen }}>
@@ -89,7 +134,6 @@ export function SearchProvider({ children }: Props) {
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useSearch = () => {
   const searchContext = React.useContext(SearchContext)
 

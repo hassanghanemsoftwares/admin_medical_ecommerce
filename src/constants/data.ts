@@ -11,47 +11,54 @@ export const navItems: NavItem[] = [
   {
     title: 'Categories',
     url: '/categories',
-    icon: 'userPen',
+    icon: 'layers',
     permission: "view-category",
     shortcut: ['c', 'c'],
   },
   {
     title: 'Products',
     url: '/products',
-    icon: 'userPen',
+    icon: 'product',
     permission: "view-product",
-    shortcut: ['p', 'p'],
+    shortcut: ['p', 'r'],
   },
-  // {
-  //   title: 'Accounts',
-  //   url: '#',
-  //   icon: 'billing',
-  //   isActive: false,
-  //   permission: "accounts",
-  //   items: [
-  //     {
-  //       title: 'Users',
-  //       url: '/users',
-  //       icon: 'userPen',
-  //       permission: "view-user",
-  //       shortcut: ['u', 'u']
-  //     },
-  //   ]
-  // },
-
+  {
+    title: 'Stock',
+    url: '#',
+    icon: 'billing',
+    isActive: false,
+    permission: "view-stock",
+    items: [
+      {
+        title: 'Stocks',
+        url: '/stocks',
+        icon: 'box',
+        permission: "view-stock",
+        shortcut: ['s', 'k'],
+      },
+      {
+        title: 'Stock Adjustments',
+        url: '/stock-adjustments',
+        icon: 'sliders',
+        permission: "view-stock-adjustment",
+        shortcut: ['s', 'a'],
+      }
+    ]
+  }
 ];
+
 export const profileDropdownItems = [
   {
     permission: "view-profile",
     to: "/profile",
     translationKey: "Sidebar.Profile",
-    shortcut: ['p', 'p'],
+    shortcut: ['p', 'f'],
   },
   {
     permission: "view-settings",
     to: "/settings",
     translationKey: "Sidebar.Settings",
-    shortcut: ['s', 's'],
+    shortcut: ['s', 't'],
   },
   {
     permission: "view-user",

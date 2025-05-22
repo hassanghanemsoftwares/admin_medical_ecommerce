@@ -86,7 +86,6 @@ export function useConfigurationsLogic() {
                 toast.error(response.message);
             }
         } catch (error) {
-            console.error("Configuration submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };

@@ -41,7 +41,7 @@ export function useProductsTableLogic() {
                 ? toast.success(response.message)
                 : toast.error(response.message);
         } catch {
-            toast.error(messages("Categories.DeleteFailed"));
+            toast.error(messages("Product.DeleteFailed"));
         } finally {
             setIsDeletingProduct(false);
             setDeleteDialogOpen(false);
@@ -96,17 +96,13 @@ export function useProductsTableLogic() {
         handleRefresh,
         setSearchInput,
         searchInput,
-
         deleteDialogProps: {
             open: deleteDialogOpen,
             onClose: () => setDeleteDialogOpen(false),
             onConfirm: handleConfirmDeleteProduct,
             loading: isDeletingProduct,
-            title: messages("Categories.Delete Product"),
-            description: messages("Categories.Delete confirm"),
+            title: messages("Product.Delete Product"),
+            description: messages("Product.Delete confirm"),
         },
-
-
-
     };
 }

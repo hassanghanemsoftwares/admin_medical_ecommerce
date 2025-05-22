@@ -5,7 +5,7 @@ import { SizesTableBody } from "./SizesTableBody";
 import { SizesTableDialogs } from "./SizesTableDialogs";
 import { SizesTableHeader } from "./SizesTableHeader";
 
-export function SizesTable() {
+export default  function SizesTable() {
   const {
     table,
     columns,

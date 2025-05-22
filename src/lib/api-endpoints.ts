@@ -124,14 +124,26 @@ const API_ENDPOINTS = {
         CREATE: withVersion("products"),
         UPDATE: (id: number) => withVersion(`products/${id}`),
         DELETE: (id: number) => withVersion(`products/${id}`),
+        GENERATE_BARCODE: withVersion("products/generate-barcode"),
     },
     PRODUCT_IMAGES: {
         UPDATE: (id: number) => withVersion(`product_image/${id}`),
         DELETE: (id: number) => withVersion(`product_image/${id}`),
     },
     PRODUCT_VARIANT: {
-
         DELETE: (id: number) => withVersion(`product_variant/${id}`),
+        LIST: withVersion("getAllProductsVariants"),
+
+    },
+    STOCKS: {
+        LIST: withVersion("stocks"),
+    },
+
+    STOCK_ADJUSTMENTS: {
+        LIST: withVersion("stock-adjustments"),
+        DETAILS: (id: number) => withVersion(`stock-adjustments/${id}`),
+        CREATE_MANUAL: withVersion("stock-adjustments/manual"),
+        DELETE: (id: number) => withVersion(`stock-adjustments/${id}`),
     },
 };
 

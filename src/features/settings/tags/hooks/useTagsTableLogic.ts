@@ -83,7 +83,6 @@ export function useTagsTableLogic() {
             dispatch(fetchSettings());
 
         } catch (error) {
-            console.error("Tag submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };

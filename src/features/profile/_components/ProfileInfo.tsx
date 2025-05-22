@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FC } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "@/types/apiTypes";
+import { User } from "@/types/api.interfaces";
 import { useTranslation } from "react-i18next";
 
 interface ProfileInfoProps {

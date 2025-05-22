@@ -5,7 +5,7 @@ import { TagsTableBody } from "./TagsTableBody";
 import { TagsTableDialogs } from "./TagsTableDialogs";
 import { TagsTableHeader } from "./TagsTableHeader";
 
-export function TagsTable() {
+export default function TagsTable() {
   const {
     table,
     columns,

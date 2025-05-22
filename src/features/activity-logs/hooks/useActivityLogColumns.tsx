@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { ActivityLog } from "@/types/apiTypes";
+import { ActivityLog } from "@/types/api.interfaces";
 import { useTranslation } from "react-i18next";
 import { TableHeaderSort } from "@/components/datatable/table-header-sort";
 import { getDeviceIcon } from "@/components/getDeviceIcon";

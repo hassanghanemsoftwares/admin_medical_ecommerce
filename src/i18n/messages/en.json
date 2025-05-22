@@ -130,7 +130,18 @@
     "Navigation": "Navigation",
     "Theme": "Theme",
     "type_a_command_or_search": "type a command or search",
-    "Branches": "Branches"
+    "Branches": "Branches",
+    "no_results_found": "No results found",
+    "Category": "Category",
+    "Learning": "Learning",
+    "Home": "Home",
+    "Product": "Product",
+    "New": "New",
+    "Edit": "Edit",
+    "Stock": "Stock",
+    "Stocks": "Stocks",
+    "Stock Adjustments": "Stock Adjustments",
+    "Stock-adjustments": "Stock Adjustments"
   },
   "Table": {
     "searchPlaceholder": "Filter items...",
@@ -236,12 +247,47 @@
     "missing_required_data": "Some required data is missing.",
     "confirm": "Confirm",
     "cancel": "Cancel",
-
     "status": "Status",
     "active": "Active",
     "inactive": "Inactive",
     "select_size": "Select a size",
-    "select_color": "Select a color"
+    "select_color": "Select a color",
+    "delivery_charge_min": "Minimum delivery charge",
+    "min_stock_alert_min": "Minimum stock alert threshold",
+    "Shelf_season_required": "Shelf season is required",
+    "Shelf_season_invalid": "Invalid shelf season value",
+    "SelectWarehouse": "Select a warehouse",
+    "generate": "Generate",
+    "Barcode": "Barcode",
+    "Category": "Category",
+    "Status": "Status",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "Price": "Price",
+    "Discount": "Discount",
+    "variant": "Variant",
+    "select_variant": "Select Variant",
+    "warehouse": "Warehouse",
+    "select_warehouse": "Select Warehouse",
+    "shelf": "Shelf",
+    "select_shelf": "Select Shelf",
+    "type": "Type",
+    "type_required": "Type is required",
+    "manual": "Manual",
+    "damage": "Damage",
+    "direction": "Direction",
+    "direction_required": "Direction is required",
+    "increase": "Increase",
+    "decrease": "Decrease",
+    "quantity_required": "Quantity is required",
+    "product_info": "Product Info",
+    "quantity": "Quantity",
+    "cost_per_item": "Cost per Item",
+    "reason": "Reason",
+    "reference_type": "Reference Type",
+    "reference_id": "Reference ID",
+    "adjusted_by": "Adjusted By",
+    "created_at": "Created At"
   },
   "Dashboard": {},
   "Users": {
@@ -516,8 +562,34 @@
 
     "delete_variant_title": "Delete Variant",
     "delete_variant_desc": "Are you sure you want to delete this variant?",
-    "add_variant": "Add Variant"
-,  "addProduct": "Add Product"
-    
+    "add_variant": "Add Variant",
+    "addProduct": "Add Product",
+    "Delete Product": "Delete product",
+    "noResults": "No products found"
+  },
+
+  "StockAdjustments": {
+    "DeleteFailed": "Failed to delete stock adjustment",
+    "Delete StockAdjustment": "Delete Stock Adjustment",
+    "Delete confirm": "Are you sure you want to delete this stock adjustment?",
+    "Search Logs": "Search logs...",
+    "addStockAdjustment": "Add Stock Adjustment",
+    "addStockAdjustmentDescription": "Fill the form below to add a new stock adjustment",
+    "No search results": "No search results found",
+    "No logs found": "No stock adjustment logs found"
+  },
+
+  "Stocks": {
+    "No search results": "No search results",
+    "No logs found": "No logs found",
+    "Search Logs": "Search Logs",
+    "product_info": "Product Info",
+    "warehouse": "Warehouse",
+    "shelf": "Shelf",
+    "quantity": "Quantity"
+  },
+  "common": {
+    "no_color": "No color",
+    "no_size": "No size"
   }
 }

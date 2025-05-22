@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { FC } from "react";
-import { Session } from "@/types/apiTypes";
+import { Session } from "@/types/api.interfaces";
 import SessionItem from "./SessionItem";
 import { toast } from "sonner";
 import ConfirmPasswordDialog from "./ConfirmPasswordDialog";

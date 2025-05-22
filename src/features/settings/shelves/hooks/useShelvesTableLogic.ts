@@ -87,7 +87,6 @@ export function useShelvesTableLogic() {
             dispatch(fetchSettings());
 
         } catch (error) {
-            console.error("Shelf submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };

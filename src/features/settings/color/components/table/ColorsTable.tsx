@@ -6,7 +6,7 @@ import { ColorsTableDialogs } from "./ColorsTableDialogs";
 import { ColorsTableHeader } from "./ColorsTableHeader";
 
 
-export function ColorsTable() {
+export default  function ColorsTable() {
   const {
     table,
     columns,

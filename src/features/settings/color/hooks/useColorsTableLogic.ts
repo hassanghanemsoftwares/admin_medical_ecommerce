@@ -88,7 +88,6 @@ export function useColorsTableLogic() {
             dispatch(fetchSettings());
 
         } catch (error) {
-            console.error("Color submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };

@@ -5,7 +5,7 @@ import { BrandsTableBody } from "./BrandsTableBody";
 import { BrandsTableDialogs } from "./BrandsTableDialogs";
 import { BrandsTableHeader } from "./BrandsTableHeader";
 
-export function BrandsTable() {
+export default  function BrandsTable() {
   const {
     table,
     columns,

@@ -84,7 +84,6 @@ export function useSizesTableLogic() {
             dispatch(fetchSettings());
 
         } catch (error) {
-            console.error("Size submission failed:", error);
             toast.error(messages("Public.UnexpectedError"));
         }
     };

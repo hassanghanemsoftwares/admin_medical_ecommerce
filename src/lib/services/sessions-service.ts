@@ -43,7 +43,7 @@ export const destroySession = async (password: string, sessionId: string) => {
         // revalidatePath("/dashboard/profile");
         return response.data;
     } catch (error) {
-        console.log(error)
+    
         return { result: false, message: error };
     }
 };

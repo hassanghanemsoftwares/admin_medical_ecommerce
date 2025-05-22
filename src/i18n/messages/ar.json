@@ -129,7 +129,18 @@
     "Navigation": "التنقل",
     "Theme": "السمة",
     "type_a_command_or_search": "اكتب أمرًا أو ابحث",
-    "Branches": "الفروع"
+    "Branches": "الفروع",
+    "no_results_found": "لم يتم العثور على نتائج",
+    "Category": "الفئة",
+    "Learning": "التعلم",
+    "Home": "الرئيسية",
+    "Product": "المنتج",
+    "New": "جديد",
+    "Edit": "تعديل",
+    "Stock": "المخزون",
+    "Stocks": "الأصناف",
+    "Stock Adjustments": "تعديلات المخزون",
+    "Stock-adjustments": "تعديلات المخزون"
   },
   "Table": {
     "searchPlaceholder": "تصفية العناصر...",
@@ -177,7 +188,6 @@
     "code_max": "يجب ألا يتجاوز رمز اللون 20 حرفًا.",
     "color_season_required": "موسم اللون مطلوب.",
     "color_season_invalid": "تم اختيار موسم لون غير صالح.",
-
     "Occupation": "المهنة",
     "Occupation_label": "المهنة",
     "SelectOccupation": "اختر المهنة",
@@ -237,12 +247,48 @@
     "missing_required_data": "بعض البيانات المطلوبة مفقودة.",
     "confirm": "تأكيد",
     "cancel": "إلغاء",
-
     "status": "الحالة",
     "active": "نشط",
     "inactive": "غير نشط",
     "select_size": "اختر مقاسًا",
-    "select_color": "اختر لونًا"
+    "select_color": "اختر لونًا",
+    "delivery_charge_min": "أقل رسوم توصيل",
+    "min_stock_alert_min": "الحد الأدنى لتنبيه المخزون",
+    "Shelf_season_required": "موسم الرف مطلوب",
+    "Shelf_season_invalid": "قيمة موسم الرف غير صالحة",
+    "SelectWarehouse": "اختر المستودع",
+    "generate": "توليد",
+    "Barcode": "الباركود",
+    "Category": "الفئة",
+    "Status": "الحالة",
+    "available": "متوفر",
+    "unavailable": "غير متوفر",
+    "Price": "السعر",
+    "Discount": "الخصم",
+    "variant": "المنتج",
+    "select_variant": "اختر المنتج",
+    "warehouse": "المستودع",
+    "select_warehouse": "اختر المستودع",
+    "shelf": "الرف",
+    "select_shelf": "اختر الرف",
+    "type": "النوع",
+    "type_required": "النوع مطلوب",
+    "manual": "يدوي",
+    "damage": "تالف",
+    "direction": "الاتجاه",
+    "direction_required": "الاتجاه مطلوب",
+    "increase": "زيادة",
+    "decrease": "نقصان",
+    "quantity": "الكمية",
+    "quantity_required": "الكمية مطلوبة",
+    "cost_per_item": "التكلفة لكل قطعة",
+    "reason": "السبب",
+    "UnexpectedError": "حدث خطأ غير متوقع",
+    "product_info": "معلومات المنتج",
+    "reference_type": "نوع المرجع",
+    "reference_id": "معرّف المرجع",
+    "adjusted_by": "تم التعديل بواسطة",
+    "created_at": "تاريخ الإنشاء"
   },
   "Dashboard": {},
   "Users": {
@@ -515,6 +561,32 @@
 
     "delete_variant_title": "حذف المتغير",
     "delete_variant_desc": "هل أنت متأكد أنك تريد حذف هذا المتغير؟",
-    "add_variant": "إضافة متغير",  "addProduct": "إضافة منتج"
+    "add_variant": "إضافة متغير",
+    "addProduct": "إضافة منتج",
+    "Delete Product": "حذف المنتج",
+    "noResults": "لا توجد منتجات"
+  },
+  "StockAdjustments": {
+    "DeleteFailed": "فشل في حذف تعديل المخزون",
+    "Delete StockAdjustment": "حذف تعديل المخزون",
+    "Delete confirm": "هل أنت متأكد من حذف تعديل المخزون هذا؟",
+    "Search Logs": "بحث في السجلات...",
+    "addStockAdjustment": "إضافة تعديل مخزون",
+    "addStockAdjustmentDescription": "املأ النموذج أدناه لإضافة تعديل مخزون جديد",
+    "No search results": "لم يتم العثور على نتائج بحث",
+    "No logs found": "لم يتم العثور على سجلات تعديل المخزون"
+  },
+  "Stocks": {
+    "No search results": "لا توجد نتائج مطابقة",
+    "No logs found": "لا توجد سجلات",
+    "Search Logs": "ابحث في السجلات",
+    "product_info": "معلومات المنتج",
+    "warehouse": "المستودع",
+    "shelf": "الرف",
+    "quantity": "الكمية"
+  },
+  "common": {
+    "no_color": "بدون لون",
+    "no_size": "بدون مقاس"
   }
 }

@@ -14,7 +14,6 @@ const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             retry: (failureCount, error) => {
-                // eslint-disable-next-line no-console
                 if (import.meta.env.DEV) console.log({ failureCount, error })
 
                 if (failureCount >= 0 && import.meta.env.DEV) return false
@@ -45,13 +44,9 @@ const queryClient = new QueryClient({
             if (error instanceof AxiosError) {
                 if (error.response?.status === 401) {
                     toast.error('Session expired!')
-                    // useAuthStore.getState().auth.reset()
-                    // const redirect = `${router.history.location.href}`
-                    // router.navigate({ to: '/sign-in', search: { redirect } })
                 }
                 if (error.response?.status === 500) {
                     toast('Internal Server Error!')
-                    // router.navigate({ to: '/500' })
                 }
                 if (error.response?.status === 403) {
                     // router.navigate("/forbidden", { replace: true });
@@ -71,25 +66,22 @@ export default function Providers({
 
     return (
         <GoogleReCaptchaProvider
-        reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-        scriptProps={{ async: true, defer: true }}
-      >
-        <StoreProvider>
-            <QueryClientProvider client={queryClient}>
-                <DirectionProvider dir={isArabic ? "rtl" : "ltr"}>
-                    <ThemeProvider defaultTheme='system' storageKey='vite-ui-theme' >
-                        <FontProvider>
-                            <FullPageLoadingProvider>
-                                {children}
-                            </FullPageLoadingProvider>
-                        </FontProvider>
-                    </ThemeProvider>
-                </DirectionProvider>
-
-            </QueryClientProvider>
-        </StoreProvider>
-    </GoogleReCaptchaProvider>
-
-
+            reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+            scriptProps={{ async: true, defer: true }}
+        >
+            <StoreProvider>
+                <QueryClientProvider client={queryClient}>
+                    <DirectionProvider dir={isArabic ? "rtl" : "ltr"}>
+                        <ThemeProvider defaultTheme='system' storageKey='vite-ui-theme' >
+                            <FontProvider>
+                                <FullPageLoadingProvider>
+                                    {children}
+                                </FullPageLoadingProvider>
+                            </FontProvider>
+                        </ThemeProvider>
+                    </DirectionProvider>
+                </QueryClientProvider>
+            </StoreProvider>
+        </GoogleReCaptchaProvider>
     )
 }

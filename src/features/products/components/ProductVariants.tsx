@@ -24,7 +24,7 @@ interface ProductVariantsProps {
     id: number;
     size_id: number;
     color_id: number;
-  
+
   }[];
 
   onExistingVariantDelete: (
@@ -44,19 +44,18 @@ export const ProductVariants = ({
     control,
     name: "variants",
   });
-    const handleDelete = async (index: number) => {
-    const target = existingVariants[index];
 
-      try {
-        const response = await onExistingVariantDelete(target.id);
+  const handleDelete = async (index: number) => {
 
-        if (!response?.result) {
-          return;
-        }
-      } catch (error) {
-        console.error("Failed to delete image:", error);
+    try {
+      const response = await onExistingVariantDelete(index);
+
+      if (!response?.result) {
         return;
       }
+    } catch (error) {
+      return;
+    }
   };
   return (
     <div className="space-y-4">
@@ -72,7 +71,7 @@ export const ProductVariants = ({
             >
               <div>
                 <FormLabel>{messages("Public.size")}</FormLabel>
-                <Select disabled value={variant.size_id.toString()}>
+                <Select disabled value={variant.size_id ? variant.size_id.toString() : ""}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -87,7 +86,7 @@ export const ProductVariants = ({
               </div>
               <div>
                 <FormLabel>{messages("Public.color")}</FormLabel>
-                <Select disabled value={variant.color_id.toString()}>
+                <Select disabled value={variant.color_id ? variant.color_id.toString() : ""}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -100,7 +99,7 @@ export const ProductVariants = ({
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="flex justify-end pt-6">
                 <Button
                   type="button"
@@ -133,8 +132,8 @@ export const ProductVariants = ({
               <FormItem className="w-full">
                 <FormLabel>{messages("Public.size")}</FormLabel>
                 <Select
-                  onValueChange={(val) => field.onChange(Number(val))}
-                  value={field.value?.toString()}
+                  onValueChange={(val) => field.onChange(val ? Number(val) : null)}
+                  value={field.value !== null ? field.value?.toString() : ""}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={messages("Public.select_size")} />
@@ -158,8 +157,8 @@ export const ProductVariants = ({
               <FormItem>
                 <FormLabel>{messages("Public.color")}</FormLabel>
                 <Select
-                  onValueChange={(val) => field.onChange(Number(val))}
-                  value={field.value?.toString()}
+                  onValueChange={(val) => field.onChange(val ? Number(val) : null)}
+                  value={field.value !== null ? field.value?.toString() : ""}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={messages("Public.select_color")} />
@@ -176,7 +175,7 @@ export const ProductVariants = ({
               </FormItem>
             )}
           />
-    
+
           <div className="flex justify-end">
             <Button
               type="button"
@@ -194,9 +193,9 @@ export const ProductVariants = ({
         variant="outline"
         onClick={() =>
           append({
-            size_id: sizes[0]?.id ?? 0,
-            color_id: colors[0]?.id ?? 0,
-           
+            size_id: null,
+            color_id: null,
+
           })
         }
       >

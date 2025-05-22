@@ -6,7 +6,7 @@ import { MoreHorizontal } from "lucide-react";
 import { TableHeaderSort } from "@/components/datatable/table-header-sort";
 import { useTranslation } from "react-i18next";
 import { Product } from "@/types/api.interfaces";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 type UseProductColumnsProps = {
@@ -34,6 +34,12 @@ export function useProductColumns({ handleDelete }: UseProductColumnsProps): Col
       ),
     },
     {
+      accessorKey: "barcode",
+      header: ({ column }) => <TableHeaderSort column={column} title={messages("Public.Barcode")} />,
+      enableSorting: true,
+    }
+    ,
+    {
       accessorKey: "name",
       header: ({ column }) => <TableHeaderSort column={column} title={messages("Public.Name")} />,
       enableSorting: true,
@@ -48,8 +54,44 @@ export function useProductColumns({ handleDelete }: UseProductColumnsProps): Col
         </div>
       ),
     },
+    {
+      accessorKey: "category.name",
+      header: messages("Public.Category"),
+      cell: ({ row }) => row.original.category?.name?.en ?? "-",
+    }, {
+      accessorKey: "availability_status",
+      header: messages("Public.Status"),
+      cell: ({ row }) => {
+        const status = row.original.availability_status;
+        const statusColor = status === "available" ? "text-green-600" : "text-gray-500";
+        return <span className={statusColor}>{messages(`Product.status.${status}`)}</span>;
+      },
+    },
 
-
+    {
+      accessorKey: "price",
+      header: ({ column }) => (
+        <TableHeaderSort column={column} title={messages("Public.Price")} />
+      ),
+      enableSorting: true,
+      cell: ({ row }) => (
+        <span>{row.original.price} $</span>
+      ),
+    }, {
+      accessorKey: "discount",
+      header: ({ column }) => (
+        <TableHeaderSort column={column} title={messages("Public.Discount")} />
+      ),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const discount = row.original.discount;
+        return discount > 0 ? (
+          <span className="text-red-500">{discount}%</span>
+        ) : (
+          <span className="text-gray-400">-</span>
+        );
+      },
+    },
     {
       id: "actions",
       cell: ({ row }) => (

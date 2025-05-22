@@ -70,7 +70,7 @@ export const deleteProduct = async (productId: number) => {
 };
 export const updateProductImage = async (imageId: number, data: FormData) => {
     try {
-    
+
         data.append('_method', 'PUT');
 
         const response = await axiosInstance.post(API_ENDPOINTS.PRODUCT_IMAGES.UPDATE(imageId), data);
@@ -89,11 +89,24 @@ export const deleteProductImage = async (imageId: number) => {
     }
 };
 
-export const deleteProductVariant  = async (variantId: number) => {
+export const deleteProductVariant = async (variantId: number) => {
     try {
         const response = await axiosInstance.delete(API_ENDPOINTS.PRODUCT_VARIANT.DELETE(variantId));
         return response.data;
     } catch (error) {
         return { result: false, message: "Failed to delete product variant" };
+    }
+};
+
+
+export const generateBarcode = async () => {
+    try {
+        const response = await axiosInstance.get(API_ENDPOINTS.PRODUCTS.GENERATE_BARCODE);
+        return response.data;
+    } catch (error: any) {
+        return {
+            result: false,
+            message: error?.response?.data?.message || "Failed to fetch Products",
+        };
     }
 };

@@ -5,7 +5,7 @@ import { WarehousesTableBody } from "./WarehousesTableBody";
 import { WarehousesTableDialogs } from "./WarehousesTableDialogs";
 import { WarehousesTableHeader } from "./WarehousesTableHeader";
 
-export function WarehousesTable() {
+export default  function WarehousesTable() {
   const {
     table,
     columns,
